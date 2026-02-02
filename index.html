@@ -794,18 +794,32 @@
             .lang-switcher,
             .tab-nav,
             .filter-nav,
-            .spirit-filter-nav,
-            .tab-content:not(.active) {
+            .spirit-filter-nav {
                 display: none !important;
             }
 
             /* Show both tabs for printing */
-            .tab-content {
+            .tab-content,
+            .tab-content:not(.active),
+            #cocktails-tab,
+            #spirits-tab {
                 display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            /* Show all cards regardless of filter state */
+            .cocktail-card,
+            .spirit-card,
+            .cocktail-card.hidden,
+            .spirit-card.hidden {
+                display: block !important;
+                opacity: 1 !important;
+                transform: none !important;
             }
 
             #spirits-tab {
-                margin-top: 0;
+                margin-top: 10mm;
             }
 
             /* Header styling for print */
@@ -983,6 +997,7 @@
 
             /* ============ SPIRITS PAGE PRINT STYLES ============ */
             .spirits-intro {
+                display: block !important;
                 padding: 5mm 0 !important;
                 border-bottom: 1px solid #ddd !important;
                 margin-bottom: 5mm !important;
@@ -1108,6 +1123,7 @@
 
             /* Brand header for print */
             .brand-header {
+                display: block !important;
                 background: #f8f6f2 !important;
                 border: 1px solid #d4af37 !important;
                 padding: 4mm !important;
