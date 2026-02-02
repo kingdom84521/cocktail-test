@@ -21,6 +21,7 @@
             --accent-mint: #7dc7a0;
             --accent-amber: #d4955a;
             --accent-blue: #6b8fad;
+            --accent-purple: #9b7dbd;
             --shadow-gold: rgba(212, 175, 55, 0.15);
             --shadow-dark: rgba(0, 0, 0, 0.4);
         }
@@ -39,7 +40,6 @@
             overflow-x: hidden;
         }
 
-        /* Art Deco Background Pattern */
         body::before {
             content: '';
             position: fixed;
@@ -122,6 +122,49 @@
             letter-spacing: 0.3em;
             text-transform: uppercase;
             font-weight: 300;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            padding: 30px 20px 0;
+            position: relative;
+            z-index: 10;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--cream-muted);
+            padding: 15px 40px;
+            font-family: 'Josefin Sans', 'Noto Sans TC', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--gold-light);
+        }
+
+        .tab-btn.active {
+            color: var(--gold-light);
+            border-bottom-color: var(--gold-primary);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         /* Filter Navigation */
@@ -391,6 +434,227 @@
             font-size: 1.2rem;
         }
 
+        /* ============ SPIRITS PAGE STYLES ============ */
+        .spirits-intro {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .spirits-intro p {
+            color: var(--cream-muted);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .spirits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .spirit-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardFadeIn 0.6s ease forwards;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spirit-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 
+                0 15px 50px var(--shadow-dark),
+                0 0 30px var(--shadow-gold);
+        }
+
+        .spirit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold-primary), var(--gold-dark));
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+
+        .spirit-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Bottle illustration container */
+        .bottle-visual {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.03) 0%, transparent 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 15px;
+        }
+
+        .bottle-visual::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+        }
+
+        .bottle-visual img {
+            max-height: 170px;
+            max-width: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+
+        .spirit-card:hover .bottle-visual img {
+            transform: scale(1.05);
+        }
+
+        /* Fallback placeholder when image fails to load */
+        .bottle-placeholder {
+            width: 60px;
+            height: 140px;
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-primary);
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .spirit-info {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spirit-name-zh {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--gold-light);
+            margin-bottom: 5px;
+        }
+
+        .spirit-name-en {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--cream-muted);
+            margin-bottom: 15px;
+        }
+
+        .spirit-type {
+            display: inline-block;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 2px;
+            margin-bottom: 15px;
+        }
+
+        .spirit-type.whiskey { background: rgba(139, 69, 19, 0.3); color: #DEB887; }
+        .spirit-type.rum { background: rgba(255, 255, 255, 0.15); color: #fff; }
+        .spirit-type.vodka { background: rgba(100, 149, 237, 0.2); color: #87CEEB; }
+        .spirit-type.gin { background: rgba(255, 99, 71, 0.2); color: #FFA07A; }
+        .spirit-type.tequila { background: rgba(255, 215, 0, 0.2); color: #FFD700; }
+        .spirit-type.cognac { background: rgba(139, 90, 43, 0.3); color: #DEB887; }
+        .spirit-type.vermouth { background: rgba(34, 139, 34, 0.2); color: #90EE90; }
+        .spirit-type.liqueur { background: rgba(199, 125, 142, 0.2); color: var(--accent-rose); }
+        .spirit-type.syrup { background: rgba(212, 149, 90, 0.2); color: var(--accent-amber); }
+
+        .spirit-desc {
+            font-size: 0.85rem;
+            color: var(--cream-muted);
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .spirit-usage {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            font-size: 0.8rem;
+            color: var(--accent-mint);
+        }
+
+        .spirit-usage strong {
+            color: var(--gold-primary);
+        }
+
+        /* Spirit filter */
+        .spirit-filter-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 30px 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Section headers in spirits */
+        .spirits-section-header {
+            text-align: center;
+            padding: 50px 20px 30px;
+        }
+
+        .spirits-section-header h2 {
+            font-family: 'Cormorant Garamond', 'Noto Sans TC', serif;
+            font-size: 1.8rem;
+            color: var(--gold-light);
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .spirits-section-header p {
+            color: var(--cream-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Marie Brizard special section */
+        .brand-header {
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            padding: 30px;
+            margin: 40px 0 30px;
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .brand-header h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--gold-light);
+            margin-bottom: 10px;
+        }
+
+        .brand-header p {
+            font-size: 0.9rem;
+            color: var(--cream-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             header {
@@ -410,7 +674,8 @@
                 padding: 20px 15px 60px;
             }
 
-            .cocktail-grid {
+            .cocktail-grid,
+            .spirits-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
@@ -420,18 +685,18 @@
                 padding: 20px;
             }
 
-            .filter-btn {
+            .filter-btn,
+            .tab-btn {
                 padding: 10px 20px;
                 font-size: 0.75rem;
             }
         }
 
-        /* Card hidden state for filtering */
-        .cocktail-card.hidden {
+        .cocktail-card.hidden,
+        .spirit-card.hidden {
             display: none;
         }
 
-        /* Footer decoration */
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -456,396 +721,1306 @@
             color: var(--gold-dark);
             font-size: 0.5rem;
         }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--cream-muted);
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+        }
+
+        .lang-btn:hover {
+            color: var(--gold-light);
+        }
+
+        .lang-btn.active {
+            color: var(--gold-primary);
+            font-weight: 500;
+        }
+
+        .lang-divider {
+            color: var(--cream-muted);
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .lang-switcher {
+                top: 15px;
+                right: 15px;
+            }
+        }
+
+        /* ============ PRINT STYLES FOR A4 HANDOUT ============ */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 15mm 12mm;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body {
+                background: white !important;
+                color: #1a1a1a !important;
+                font-size: 10pt !important;
+                line-height: 1.4 !important;
+            }
+
+            body::before {
+                display: none !important;
+            }
+
+            /* Hide interactive elements */
+            .lang-switcher,
+            .tab-nav,
+            .filter-nav,
+            .spirit-filter-nav,
+            .tab-content:not(.active) {
+                display: none !important;
+            }
+
+            /* Show both tabs for printing */
+            .tab-content {
+                display: block !important;
+            }
+
+            #spirits-tab {
+                margin-top: 0;
+            }
+
+            /* Header styling for print */
+            header {
+                background: none !important;
+                border-bottom: 2px solid #d4af37 !important;
+                padding: 10mm 0 5mm !important;
+                margin-bottom: 5mm !important;
+            }
+
+            .art-deco-line {
+                margin-bottom: 3mm !important;
+            }
+
+            .art-deco-line::before,
+            .art-deco-line::after {
+                background: #d4af37 !important;
+            }
+
+            .art-deco-diamond {
+                background: #d4af37 !important;
+            }
+
+            .art-deco-diamond::before {
+                background: white !important;
+            }
+
+            h1 {
+                color: #1a1a1a !important;
+                font-size: 22pt !important;
+                text-shadow: none !important;
+                margin-bottom: 2mm !important;
+            }
+
+            .subtitle {
+                color: #666 !important;
+                font-size: 10pt !important;
+            }
+
+            /* Main content */
+            main {
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+
+            /* Cocktail Grid for print - 2 columns */
+            .cocktail-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 4mm !important;
+            }
+
+            /* Cocktail Card print styling */
+            .cocktail-card {
+                background: white !important;
+                border: 1px solid #ccc !important;
+                opacity: 1 !important;
+                transform: none !important;
+                animation: none !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .cocktail-card::before {
+                display: none !important;
+            }
+
+            .cocktail-card:hover {
+                box-shadow: none !important;
+            }
+
+            .card-number {
+                color: #e0d5c0 !important;
+                font-size: 24pt !important;
+                top: 2mm !important;
+                right: 3mm !important;
+            }
+
+            .card-header {
+                padding: 3mm !important;
+                border-bottom: 1px solid #ddd !important;
+                background: #f8f6f2 !important;
+            }
+
+            .cocktail-name-zh {
+                color: #1a1a1a !important;
+                font-size: 12pt !important;
+                font-weight: 600 !important;
+            }
+
+            .cocktail-name-en {
+                color: #666 !important;
+                font-size: 9pt !important;
+            }
+
+            .card-meta {
+                gap: 2mm !important;
+                margin-top: 2mm !important;
+            }
+
+            .meta-tag {
+                font-size: 7pt !important;
+                padding: 1mm 2mm !important;
+                border: 1px solid #ccc !important;
+                background: white !important;
+            }
+
+            .meta-tag.category {
+                background: #f5f0e6 !important;
+                color: #8b7355 !important;
+                border-color: #d4af37 !important;
+            }
+
+            .meta-tag.method {
+                background: #e8f5e9 !important;
+                color: #2e7d32 !important;
+                border-color: #81c784 !important;
+            }
+
+            .meta-tag.glass {
+                background: #e3f2fd !important;
+                color: #1565c0 !important;
+                border-color: #64b5f6 !important;
+            }
+
+            .card-body {
+                padding: 3mm !important;
+            }
+
+            .section-title {
+                font-size: 8pt !important;
+                color: #8b7355 !important;
+                margin-bottom: 2mm !important;
+                border-bottom: 1px dotted #d4af37 !important;
+                padding-bottom: 1mm !important;
+            }
+
+            .section-title::after {
+                display: none !important;
+            }
+
+            .ingredients-list {
+                margin-bottom: 3mm !important;
+            }
+
+            .ingredients-list li {
+                font-size: 9pt !important;
+                padding: 1mm 0 !important;
+                border-bottom: 1px dotted #eee !important;
+                color: #1a1a1a !important;
+            }
+
+            .ingredient-amount {
+                color: #1a1a1a !important;
+                font-weight: 600 !important;
+            }
+
+            .method-text {
+                font-size: 8pt !important;
+                color: #333 !important;
+                padding-left: 3mm !important;
+                border-left: 2px solid #81c784 !important;
+                margin-bottom: 2mm !important;
+                background: #f9fbe7 !important;
+                padding: 2mm 3mm !important;
+            }
+
+            .garnish-box {
+                background: #fce4ec !important;
+                border: 1px solid #f48fb1 !important;
+                padding: 2mm !important;
+                font-size: 8pt !important;
+                color: #c2185b !important;
+            }
+
+            /* ============ SPIRITS PAGE PRINT STYLES ============ */
+            .spirits-intro {
+                padding: 5mm 0 !important;
+                border-bottom: 1px solid #ddd !important;
+                margin-bottom: 5mm !important;
+            }
+
+            .spirits-intro p {
+                color: #333 !important;
+                font-size: 10pt !important;
+            }
+
+            /* Print section header - visible on print */
+            .print-section-header {
+                display: block !important;
+                text-align: center;
+                padding: 5mm 0;
+                margin-bottom: 5mm;
+                border-bottom: 2px solid #d4af37;
+            }
+
+            .print-section-header h2 {
+                font-family: 'Cormorant Garamond', 'Noto Sans TC', serif;
+                font-size: 18pt;
+                font-weight: 600;
+                color: #1a1a1a;
+                margin: 0;
+            }
+
+            .spirits-print-header {
+                page-break-before: always;
+            }
+
+            /* Spirits Grid for print - 2 columns */
+            .spirits-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 4mm !important;
+            }
+
+            .spirit-card {
+                background: white !important;
+                border: 1px solid #ccc !important;
+                opacity: 1 !important;
+                transform: none !important;
+                animation: none !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .spirit-card::before {
+                display: none !important;
+            }
+
+            .bottle-visual {
+                height: 80px !important;
+                background: #f8f6f2 !important;
+                border-bottom: 1px solid #ddd !important;
+                padding: 8px !important;
+            }
+
+            .bottle-visual img {
+                max-height: 65px !important;
+                filter: none !important;
+            }
+
+            .bottle-placeholder {
+                height: 60px !important;
+                width: 40px !important;
+                font-size: 6pt !important;
+                background: #f0f0f0 !important;
+                border: 1px dashed #ccc !important;
+                color: #666 !important;
+            }
+
+            .spirit-info {
+                padding: 3mm !important;
+            }
+
+            .spirit-name-zh {
+                color: #1a1a1a !important;
+                font-size: 11pt !important;
+                font-weight: 600 !important;
+            }
+
+            .spirit-name-en {
+                color: #666 !important;
+                font-size: 8pt !important;
+                margin-bottom: 2mm !important;
+            }
+
+            .spirit-type {
+                font-size: 7pt !important;
+                padding: 1mm 2mm !important;
+                border: 1px solid #ccc !important;
+            }
+
+            .spirit-type.whiskey { background: #fff3e0 !important; color: #e65100 !important; border-color: #ffb74d !important; }
+            .spirit-type.rum { background: #f5f5f5 !important; color: #616161 !important; border-color: #bdbdbd !important; }
+            .spirit-type.vodka { background: #e3f2fd !important; color: #1565c0 !important; border-color: #64b5f6 !important; }
+            .spirit-type.gin { background: #ffebee !important; color: #c62828 !important; border-color: #ef9a9a !important; }
+            .spirit-type.tequila { background: #fffde7 !important; color: #f9a825 !important; border-color: #fff176 !important; }
+            .spirit-type.cognac { background: #efebe9 !important; color: #5d4037 !important; border-color: #bcaaa4 !important; }
+            .spirit-type.vermouth { background: #e8f5e9 !important; color: #2e7d32 !important; border-color: #81c784 !important; }
+            .spirit-type.liqueur { background: #fce4ec !important; color: #c2185b !important; border-color: #f48fb1 !important; }
+            .spirit-type.syrup { background: #fff8e1 !important; color: #ff8f00 !important; border-color: #ffca28 !important; }
+
+            .spirit-desc {
+                font-size: 8pt !important;
+                color: #333 !important;
+                line-height: 1.4 !important;
+            }
+
+            .spirit-usage {
+                font-size: 8pt !important;
+                color: #2e7d32 !important;
+                border-top: 1px dotted #ccc !important;
+                padding-top: 2mm !important;
+                margin-top: 2mm !important;
+            }
+
+            .spirit-usage strong {
+                color: #8b7355 !important;
+            }
+
+            /* Brand header for print */
+            .brand-header {
+                background: #f8f6f2 !important;
+                border: 1px solid #d4af37 !important;
+                padding: 4mm !important;
+                margin: 4mm 0 !important;
+                page-break-inside: avoid !important;
+            }
+
+            .brand-header h3 {
+                color: #1a1a1a !important;
+                font-size: 12pt !important;
+            }
+
+            .brand-header p {
+                color: #333 !important;
+                font-size: 9pt !important;
+            }
+
+            /* Footer for print */
+            footer {
+                border-top: 1px solid #ccc !important;
+                padding: 3mm 0 !important;
+                margin-top: 5mm !important;
+            }
+
+            .footer-deco {
+                color: #999 !important;
+                font-size: 8pt !important;
+            }
+
+            .footer-deco::before,
+            .footer-deco::after {
+                color: #d4af37 !important;
+            }
+
+            /* Add page numbers */
+            @page {
+                @bottom-center {
+                    content: counter(page);
+                }
+            }
+
+            /* Ensure cards don't break across pages */
+            .cocktail-card,
+            .spirit-card {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            /* Print button hide */
+            .print-btn {
+                display: none !important;
+            }
+        }
+
+        /* Print button styling (visible on screen) */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--gold-primary);
+            color: var(--bg-dark);
+            border: none;
+            padding: 15px 25px;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .print-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        .print-btn::before {
+            content: '🖨️ ';
+        }
+
+        /* Print section header - hidden on screen */
+        .print-section-header {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <header>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="zh">中文</button>
+            <span class="lang-divider">|</span>
+            <button class="lang-btn" data-lang="en">EN</button>
+        </div>
         <div class="art-deco-line">
             <div class="art-deco-diamond"></div>
         </div>
-        <h1>調酒配方</h1>
-        <p class="subtitle">Classic Cocktail Recipes</p>
+        <h1 data-en="Cocktail Recipes" data-zh="調酒配方">調酒配方</h1>
+        <p class="subtitle" data-en="Classic Cocktail Recipes" data-zh="Classic Cocktail Recipes">Classic Cocktail Recipes</p>
     </header>
 
-    <nav class="filter-nav">
-        <button class="filter-btn active" data-filter="all">全部 All</button>
-        <button class="filter-btn" data-filter="before-dinner">餐前酒 Before Dinner</button>
-        <button class="filter-btn" data-filter="after-dinner">餐後酒 After Dinner</button>
-        <button class="filter-btn" data-filter="long-drink">長飲 Long Drink</button>
-        <button class="filter-btn" data-filter="all-day">全天候 All Day</button>
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="cocktails" data-en="Cocktails" data-zh="調酒配方">調酒配方 Cocktails</button>
+        <button class="tab-btn" data-tab="spirits" data-en="Spirits" data-zh="基酒介紹">基酒介紹 Spirits</button>
     </nav>
 
-    <main>
-        <div class="cocktail-grid" id="cocktailGrid">
-            <!-- Card 1: Golden Shine -->
-            <article class="cocktail-card" data-category="before-dinner">
-                <span class="card-number">01</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">金色閃耀</h2>
-                    <p class="cocktail-name-en">Golden Shine</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">Before Dinner</span>
-                        <span class="meta-tag method">Stir 攪拌法</span>
-                        <span class="meta-tag glass">雞尾酒杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">Rum (Havana 3年)</span><span class="ingredient-amount">50 ml</span></li>
-                        <li><span class="ingredient-name">Dry Orange Liqueur</span><span class="ingredient-amount">10 ml</span></li>
-                        <li><span class="ingredient-name">Grand Marnier</span><span class="ingredient-amount">5 ml</span></li>
-                        <li><span class="ingredient-name">Sweet Vermouth</span><span class="ingredient-amount">5 ml</span></li>
-                    </ul>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">🍊</span>
-                        <span>Orange Slice 柳橙片</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 2: Old Fashioned -->
-            <article class="cocktail-card" data-category="before-dinner">
-                <span class="card-number">02</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">老式雞尾酒</h2>
-                    <p class="cocktail-name-en">Old Fashioned</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">Before Dinner</span>
-                        <span class="meta-tag method">Muddle & Build</span>
-                        <span class="meta-tag glass">古典杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">Bourbon Whiskey</span><span class="ingredient-amount">45 ml</span></li>
-                        <li><span class="ingredient-name">Angostura Bitters</span><span class="ingredient-amount">2 dash</span></li>
-                        <li><span class="ingredient-name">Sugar 糖</span><span class="ingredient-amount">1 barspoon</span></li>
-                        <li><span class="ingredient-name">Soda Water</span><span class="ingredient-amount">Few dashes</span></li>
-                    </ul>
-                    <h3 class="section-title">調製方法</h3>
-                    <p class="method-text">先搗糖與苦精，加冰塊至8分滿，倒入酒</p>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">🍒</span>
-                        <span>Orange Slice & Cherry 柳橙片與櫻桃</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 3: Daiquiri -->
-            <article class="cocktail-card" data-category="before-dinner">
-                <span class="card-number">03</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">黛綺莉</h2>
-                    <p class="cocktail-name-en">Daiquiri</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">Before Dinner</span>
-                        <span class="meta-tag method">Shake 搖盪法</span>
-                        <span class="meta-tag glass">小雞尾酒杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">White Rum</span><span class="ingredient-amount">45 ml</span></li>
-                        <li><span class="ingredient-name">Fresh Lime Juice</span><span class="ingredient-amount">20 ml</span></li>
-                        <li><span class="ingredient-name">Simple Syrup</span><span class="ingredient-amount">15 ml</span></li>
-                    </ul>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">—</span>
-                        <span>無裝飾</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 4: Mojito -->
-            <article class="cocktail-card" data-category="long-drink">
-                <span class="card-number">04</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">莫希托</h2>
-                    <p class="cocktail-name-en">Mojito</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">Long Drink</span>
-                        <span class="meta-tag method">Muddle & Build</span>
-                        <span class="meta-tag glass">高球杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">White Rum</span><span class="ingredient-amount">45 ml</span></li>
-                        <li><span class="ingredient-name">Lime Juice</span><span class="ingredient-amount">20 ml</span></li>
-                        <li><span class="ingredient-name">Sugar 糖</span><span class="ingredient-amount">2 barspoon</span></li>
-                        <li><span class="ingredient-name">Mint Leaves 薄荷葉</span><span class="ingredient-amount">12 片</span></li>
-                        <li><span class="ingredient-name">Soda Water</span><span class="ingredient-amount">補滿</span></li>
-                    </ul>
-                    <h3 class="section-title">調製方法</h3>
-                    <p class="method-text">搗薄荷糖檸檬，加碎冰至全滿，倒酒蘇打攪拌</p>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">🌿</span>
-                        <span>Sprigs of Mint Leaves 薄荷葉叢</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 5: Tequila Sunrise -->
-            <article class="cocktail-card" data-category="long-drink">
-                <span class="card-number">05</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">龍舌蘭日出</h2>
-                    <p class="cocktail-name-en">Tequila Sunrise</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">Long Drink</span>
-                        <span class="meta-tag method">Build & Float</span>
-                        <span class="meta-tag glass">小高球杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">Tequila</span><span class="ingredient-amount">45 ml</span></li>
-                        <li><span class="ingredient-name">Orange Juice</span><span class="ingredient-amount">90 ml</span></li>
-                        <li><span class="ingredient-name">Grenadine Syrup</span><span class="ingredient-amount">15 ml</span></li>
-                    </ul>
-                    <h3 class="section-title">調製方法</h3>
-                    <p class="method-text">直調，紅石榴糖漿最後從中間沈底</p>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">🍒</span>
-                        <span>Orange Slice & Cherry 柳橙片與櫻桃</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 6: Long Island Iced Tea -->
-            <article class="cocktail-card" data-category="long-drink">
-                <span class="card-number">06</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">長島冰茶</h2>
-                    <p class="cocktail-name-en">Long Island Iced Tea</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">Long Drink</span>
-                        <span class="meta-tag method">Build 直調法</span>
-                        <span class="meta-tag glass">高球杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">Vodka</span><span class="ingredient-amount">15 ml</span></li>
-                        <li><span class="ingredient-name">Gin</span><span class="ingredient-amount">15 ml</span></li>
-                        <li><span class="ingredient-name">Tequila</span><span class="ingredient-amount">15 ml</span></li>
-                        <li><span class="ingredient-name">White Rum</span><span class="ingredient-amount">15 ml</span></li>
-                        <li><span class="ingredient-name">Cointreau</span><span class="ingredient-amount">15 ml</span></li>
-                        <li><span class="ingredient-name">Lemon Juice</span><span class="ingredient-amount">25 ml</span></li>
-                        <li><span class="ingredient-name">Simple Syrup</span><span class="ingredient-amount">30 ml</span></li>
-                        <li><span class="ingredient-name">Cola</span><span class="ingredient-amount">補滿</span></li>
-                    </ul>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">🍋</span>
-                        <span>Lemon Slice 檸檬片</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 7: Alexander -->
-            <article class="cocktail-card" data-category="after-dinner">
-                <span class="card-number">07</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">亞歷山大</h2>
-                    <p class="cocktail-name-en">Alexander</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">After Dinner</span>
-                        <span class="meta-tag method">Shake 搖盪法</span>
-                        <span class="meta-tag glass">小雞尾酒杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">Brandy</span><span class="ingredient-amount">30 ml</span></li>
-                        <li><span class="ingredient-name">Brown Crème de Cacao</span><span class="ingredient-amount">30 ml</span></li>
-                        <li><span class="ingredient-name">Fresh Cream</span><span class="ingredient-amount">30 ml</span></li>
-                    </ul>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">✨</span>
-                        <span>Nutmeg 肉豆蔻粉 (考試用肉桂粉)</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 8: Chocolate Lady -->
-            <article class="cocktail-card" data-category="after-dinner">
-                <span class="card-number">08</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">巧克力女士</h2>
-                    <p class="cocktail-name-en">Chocolate Lady</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">After Dinner</span>
-                        <span class="meta-tag method">Shake & Float</span>
-                        <span class="meta-tag glass">大雞尾酒杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">Whisky</span><span class="ingredient-amount">30 ml</span></li>
-                        <li><span class="ingredient-name">Brown Crème de Cacao</span><span class="ingredient-amount">30 ml</span></li>
-                        <li><span class="ingredient-name">Chocolate Syrup</span><span class="ingredient-amount">30 ml</span></li>
-                        <li><span class="ingredient-name">Fresh Cream</span><span class="ingredient-amount">30 ml</span></li>
-                    </ul>
-                    <h3 class="section-title">調製方法</h3>
-                    <p class="method-text">前三項搖盪，鮮奶油最後漂浮在上面</p>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">🍫</span>
-                        <span>Chocolate Powder 巧克力粉</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 9: Grasshopper -->
-            <article class="cocktail-card" data-category="after-dinner">
-                <span class="card-number">09</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">綠蚱蜢</h2>
-                    <p class="cocktail-name-en">Grasshopper</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">After Dinner</span>
-                        <span class="meta-tag method">Shake 搖盪法</span>
-                        <span class="meta-tag glass">小雞尾酒杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">White Crème de Cacao</span><span class="ingredient-amount">20 ml</span></li>
-                        <li><span class="ingredient-name">Green Crème de Menthe</span><span class="ingredient-amount">20 ml</span></li>
-                        <li><span class="ingredient-name">Fresh Cream</span><span class="ingredient-amount">20 ml</span></li>
-                    </ul>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">—</span>
-                        <span>無裝飾</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 10: Kamikaze -->
-            <article class="cocktail-card" data-category="all-day">
-                <span class="card-number">10</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">神風特攻隊</h2>
-                    <p class="cocktail-name-en">Kamikaze</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">All Day</span>
-                        <span class="meta-tag method">Shake 搖盪法</span>
-                        <span class="meta-tag glass">古典杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">Vodka</span><span class="ingredient-amount">30 ml</span></li>
-                        <li><span class="ingredient-name">Triple Sec</span><span class="ingredient-amount">30 ml</span></li>
-                        <li><span class="ingredient-name">Fresh Lime Juice</span><span class="ingredient-amount">30 ml</span></li>
-                    </ul>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">🍊</span>
-                        <span>Orange Wedge 柳橙角</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 11: Side Car -->
-            <article class="cocktail-card" data-category="all-day">
-                <span class="card-number">11</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">側車</h2>
-                    <p class="cocktail-name-en">Side Car</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">All Day</span>
-                        <span class="meta-tag method">Shake 搖盪法</span>
-                        <span class="meta-tag glass">小雞尾酒杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">Brandy</span><span class="ingredient-amount">40 ml</span></li>
-                        <li><span class="ingredient-name">Triple Sec</span><span class="ingredient-amount">20 ml</span></li>
-                        <li><span class="ingredient-name">Lemon Juice</span><span class="ingredient-amount">20 ml</span></li>
-                    </ul>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">—</span>
-                        <span>無裝飾</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 12: Margarita -->
-            <article class="cocktail-card" data-category="all-day">
-                <span class="card-number">12</span>
-                <div class="card-header">
-                    <h2 class="cocktail-name-zh">瑪格麗特</h2>
-                    <p class="cocktail-name-en">Margarita</p>
-                    <div class="card-meta">
-                        <span class="meta-tag category">All Day</span>
-                        <span class="meta-tag method">Shake 搖盪法</span>
-                        <span class="meta-tag glass">瑪格麗特杯</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h3 class="section-title">材料 Ingredients</h3>
-                    <ul class="ingredients-list">
-                        <li><span class="ingredient-name">Tequila</span><span class="ingredient-amount">35 ml</span></li>
-                        <li><span class="ingredient-name">Cointreau</span><span class="ingredient-amount">20 ml</span></li>
-                        <li><span class="ingredient-name">Lime Juice</span><span class="ingredient-amount">15 ml</span></li>
-                    </ul>
-                    <h3 class="section-title">調製方法</h3>
-                    <p class="method-text">搖盪法，需先做鹽口</p>
-                    <h3 class="section-title">裝飾 Garnish</h3>
-                    <div class="garnish-box">
-                        <span class="garnish-icon">🧂</span>
-                        <span>Salt Rim 鹽口杯緣</span>
-                    </div>
-                </div>
-            </article>
+    <!-- Cocktails Tab -->
+    <div id="cocktails-tab" class="tab-content active">
+        <div class="print-section-header">
+            <h2>調酒配方 Cocktail Recipes</h2>
         </div>
-    </main>
+        <nav class="filter-nav">
+            <button class="filter-btn active" data-filter="all" data-en="All" data-zh="全部">全部 All</button>
+            <button class="filter-btn" data-filter="before-dinner" data-en="Before Dinner" data-zh="餐前酒">餐前酒 Before Dinner</button>
+            <button class="filter-btn" data-filter="after-dinner" data-en="After Dinner" data-zh="餐後酒">餐後酒 After Dinner</button>
+            <button class="filter-btn" data-filter="long-drink" data-en="Long Drink" data-zh="長飲">長飲 Long Drink</button>
+            <button class="filter-btn" data-filter="all-day" data-en="All Day" data-zh="全天候">全天候 All Day</button>
+        </nav>
+
+        <main>
+            <div class="cocktail-grid" id="cocktailGrid">
+                <!-- Card 1: Golden Shine -->
+                <article class="cocktail-card" data-category="before-dinner">
+                    <span class="card-number">01</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">金色閃耀</h2>
+                        <p class="cocktail-name-en">Golden Shine</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">Before Dinner</span>
+                            <span class="meta-tag method">Stir 攪拌法</span>
+                            <span class="meta-tag glass">雞尾酒杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">Rum (Havana 3年)</span><span class="ingredient-amount">50 ml</span></li>
+                            <li><span class="ingredient-name">Dry Orange Liqueur</span><span class="ingredient-amount">10 ml</span></li>
+                            <li><span class="ingredient-name">Grand Marnier</span><span class="ingredient-amount">5 ml</span></li>
+                            <li><span class="ingredient-name">Sweet Vermouth</span><span class="ingredient-amount">5 ml</span></li>
+                        </ul>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">🍊</span>
+                            <span>Orange Slice 柳橙片</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 2: Old Fashioned -->
+                <article class="cocktail-card" data-category="before-dinner">
+                    <span class="card-number">02</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">老式雞尾酒</h2>
+                        <p class="cocktail-name-en">Old Fashioned</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">Before Dinner</span>
+                            <span class="meta-tag method">Muddle & Build</span>
+                            <span class="meta-tag glass">古典杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">Bourbon Whiskey</span><span class="ingredient-amount">45 ml</span></li>
+                            <li><span class="ingredient-name">Angostura Bitters</span><span class="ingredient-amount">2 dash</span></li>
+                            <li><span class="ingredient-name">Sugar 糖</span><span class="ingredient-amount">1 barspoon</span></li>
+                            <li><span class="ingredient-name">Soda Water</span><span class="ingredient-amount">Few dashes</span></li>
+                        </ul>
+                        <h3 class="section-title"><span data-en="Method" data-zh="調製方法">調製方法</span></h3>
+                        <p class="method-text" data-en="Muddle sugar with bitters, add ice to 80% full, pour whiskey, then add a splash of soda water" data-zh="先搗糖與苦精，加冰塊至8分滿，倒入酒，再加一點蘇打水">先搗糖與苦精，加冰塊至8分滿，倒入酒，再加一點蘇打水</p>
+                        <h3 class="section-title"><span data-en="Garnish" data-zh="裝飾">裝飾</span> Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">🍒</span>
+                            <span data-en="Orange Slice & Cherry" data-zh="柳橙片與櫻桃">Orange Slice & Cherry 柳橙片與櫻桃</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 3: Daiquiri -->
+                <article class="cocktail-card" data-category="before-dinner">
+                    <span class="card-number">03</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">黛綺莉</h2>
+                        <p class="cocktail-name-en">Daiquiri</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">Before Dinner</span>
+                            <span class="meta-tag method">Shake 搖盪法</span>
+                            <span class="meta-tag glass">小雞尾酒杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">White Rum</span><span class="ingredient-amount">45 ml</span></li>
+                            <li><span class="ingredient-name">Fresh Lime Juice</span><span class="ingredient-amount">20 ml</span></li>
+                            <li><span class="ingredient-name">Simple Syrup</span><span class="ingredient-amount">15 ml</span></li>
+                        </ul>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">—</span>
+                            <span>無裝飾</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 4: Mojito -->
+                <article class="cocktail-card" data-category="long-drink">
+                    <span class="card-number">04</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">莫希托</h2>
+                        <p class="cocktail-name-en">Mojito</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">Long Drink</span>
+                            <span class="meta-tag method">Muddle & Build</span>
+                            <span class="meta-tag glass">高球杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">White Rum</span><span class="ingredient-amount">45 ml</span></li>
+                            <li><span class="ingredient-name">Lime Juice</span><span class="ingredient-amount">20 ml</span></li>
+                            <li><span class="ingredient-name">Sugar 糖</span><span class="ingredient-amount">2 barspoon</span></li>
+                            <li><span class="ingredient-name">Mint Leaves 薄荷葉</span><span class="ingredient-amount">12 片</span></li>
+                            <li><span class="ingredient-name">Soda Water</span><span class="ingredient-amount">補滿</span></li>
+                        </ul>
+                        <h3 class="section-title">調製方法</h3>
+                        <p class="method-text">搗薄荷糖檸檬，加碎冰至全滿，倒酒蘇打攪拌</p>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">🌿</span>
+                            <span>Sprigs of Mint Leaves 薄荷葉叢</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 5: Tequila Sunrise -->
+                <article class="cocktail-card" data-category="long-drink">
+                    <span class="card-number">05</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">龍舌蘭日出</h2>
+                        <p class="cocktail-name-en">Tequila Sunrise</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">Long Drink</span>
+                            <span class="meta-tag method">Build & Float</span>
+                            <span class="meta-tag glass">小高球杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">Tequila</span><span class="ingredient-amount">45 ml</span></li>
+                            <li><span class="ingredient-name">Orange Juice</span><span class="ingredient-amount">90 ml</span></li>
+                            <li><span class="ingredient-name">Grenadine Syrup</span><span class="ingredient-amount">15 ml</span></li>
+                        </ul>
+                        <h3 class="section-title">調製方法</h3>
+                        <p class="method-text">直調，紅石榴糖漿最後從中間沈底</p>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">🍒</span>
+                            <span>Orange Slice & Cherry 柳橙片與櫻桃</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 6: Long Island Iced Tea -->
+                <article class="cocktail-card" data-category="long-drink">
+                    <span class="card-number">06</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">長島冰茶</h2>
+                        <p class="cocktail-name-en">Long Island Iced Tea</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">Long Drink</span>
+                            <span class="meta-tag method">Build 直調法</span>
+                            <span class="meta-tag glass">高球杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">Vodka</span><span class="ingredient-amount">15 ml</span></li>
+                            <li><span class="ingredient-name">Gin</span><span class="ingredient-amount">15 ml</span></li>
+                            <li><span class="ingredient-name">Tequila</span><span class="ingredient-amount">15 ml</span></li>
+                            <li><span class="ingredient-name">White Rum</span><span class="ingredient-amount">15 ml</span></li>
+                            <li><span class="ingredient-name">Cointreau</span><span class="ingredient-amount">15 ml</span></li>
+                            <li><span class="ingredient-name">Lemon Juice</span><span class="ingredient-amount">25 ml</span></li>
+                            <li><span class="ingredient-name">Simple Syrup</span><span class="ingredient-amount">30 ml</span></li>
+                            <li><span class="ingredient-name">Cola</span><span class="ingredient-amount">補滿</span></li>
+                        </ul>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">🍋</span>
+                            <span>Lemon Slice 檸檬片</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 7: Alexander -->
+                <article class="cocktail-card" data-category="after-dinner">
+                    <span class="card-number">07</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">亞歷山大</h2>
+                        <p class="cocktail-name-en">Alexander</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">After Dinner</span>
+                            <span class="meta-tag method">Shake 搖盪法</span>
+                            <span class="meta-tag glass">小雞尾酒杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">Brandy</span><span class="ingredient-amount">30 ml</span></li>
+                            <li><span class="ingredient-name">Brown Crème de Cacao</span><span class="ingredient-amount">30 ml</span></li>
+                            <li><span class="ingredient-name">Fresh Cream</span><span class="ingredient-amount">30 ml</span></li>
+                        </ul>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">✨</span>
+                            <span>Nutmeg 肉豆蔻粉 (考試用肉桂粉)</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 8: Chocolate Lady -->
+                <article class="cocktail-card" data-category="after-dinner">
+                    <span class="card-number">08</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">巧克力女士</h2>
+                        <p class="cocktail-name-en">Chocolate Lady</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">After Dinner</span>
+                            <span class="meta-tag method">Shake & Float</span>
+                            <span class="meta-tag glass" data-en="Cocktail Glass" data-zh="大雞尾酒杯">大雞尾酒杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title"><span data-en="Ingredients" data-zh="材料">材料</span> Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">Whisky</span><span class="ingredient-amount">30 ml</span></li>
+                            <li><span class="ingredient-name">Brown Crème de Cacao</span><span class="ingredient-amount">30 ml</span></li>
+                            <li><span class="ingredient-name">Chocolate Syrup</span><span class="ingredient-amount">30 ml</span></li>
+                            <li><span class="ingredient-name">Fresh Cream</span><span class="ingredient-amount">30 ml</span></li>
+                        </ul>
+                        <h3 class="section-title"><span data-en="Method" data-zh="調製方法">調製方法</span></h3>
+                        <p class="method-text" data-en="Shake the first three ingredients, then float fresh cream on top" data-zh="前三項搖盪，鮮奶油最後漂浮在上面">前三項搖盪，鮮奶油最後漂浮在上面</p>
+                        <h3 class="section-title"><span data-en="Garnish" data-zh="裝飾">裝飾</span> Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">🍫</span>
+                            <span data-en="Chocolate Powder" data-zh="巧克力粉">Chocolate Powder 巧克力粉</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 9: Grasshopper -->
+                <article class="cocktail-card" data-category="after-dinner">
+                    <span class="card-number">09</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">綠蚱蜢</h2>
+                        <p class="cocktail-name-en">Grasshopper</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">After Dinner</span>
+                            <span class="meta-tag method">Shake 搖盪法</span>
+                            <span class="meta-tag glass">小雞尾酒杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">White Crème de Cacao</span><span class="ingredient-amount">20 ml</span></li>
+                            <li><span class="ingredient-name">Green Crème de Menthe</span><span class="ingredient-amount">20 ml</span></li>
+                            <li><span class="ingredient-name">Fresh Cream</span><span class="ingredient-amount">20 ml</span></li>
+                        </ul>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">—</span>
+                            <span>無裝飾</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 10: Kamikaze -->
+                <article class="cocktail-card" data-category="all-day">
+                    <span class="card-number">10</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">神風特攻隊</h2>
+                        <p class="cocktail-name-en">Kamikaze</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">All Day</span>
+                            <span class="meta-tag method">Shake 搖盪法</span>
+                            <span class="meta-tag glass">古典杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">Vodka</span><span class="ingredient-amount">30 ml</span></li>
+                            <li><span class="ingredient-name">Triple Sec</span><span class="ingredient-amount">30 ml</span></li>
+                            <li><span class="ingredient-name">Fresh Lime Juice</span><span class="ingredient-amount">30 ml</span></li>
+                        </ul>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">🍊</span>
+                            <span>Orange Wedge 柳橙角</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 11: Side Car -->
+                <article class="cocktail-card" data-category="all-day">
+                    <span class="card-number">11</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">側車</h2>
+                        <p class="cocktail-name-en">Side Car</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">All Day</span>
+                            <span class="meta-tag method">Shake 搖盪法</span>
+                            <span class="meta-tag glass">小雞尾酒杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">Brandy</span><span class="ingredient-amount">40 ml</span></li>
+                            <li><span class="ingredient-name">Triple Sec</span><span class="ingredient-amount">20 ml</span></li>
+                            <li><span class="ingredient-name">Lemon Juice</span><span class="ingredient-amount">20 ml</span></li>
+                        </ul>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">—</span>
+                            <span>無裝飾</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 12: Margarita -->
+                <article class="cocktail-card" data-category="all-day">
+                    <span class="card-number">12</span>
+                    <div class="card-header">
+                        <h2 class="cocktail-name-zh">瑪格麗特</h2>
+                        <p class="cocktail-name-en">Margarita</p>
+                        <div class="card-meta">
+                            <span class="meta-tag category">All Day</span>
+                            <span class="meta-tag method">Shake 搖盪法</span>
+                            <span class="meta-tag glass">瑪格麗特杯</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="section-title">材料 Ingredients</h3>
+                        <ul class="ingredients-list">
+                            <li><span class="ingredient-name">Tequila</span><span class="ingredient-amount">35 ml</span></li>
+                            <li><span class="ingredient-name">Cointreau</span><span class="ingredient-amount">20 ml</span></li>
+                            <li><span class="ingredient-name">Lime Juice</span><span class="ingredient-amount">15 ml</span></li>
+                        </ul>
+                        <h3 class="section-title">調製方法</h3>
+                        <p class="method-text">搖盪法，需先做鹽口</p>
+                        <h3 class="section-title">裝飾 Garnish</h3>
+                        <div class="garnish-box">
+                            <span class="garnish-icon">🧂</span>
+                            <span>Salt Rim 鹽口杯緣</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <!-- Spirits Tab -->
+    <div id="spirits-tab" class="tab-content">
+        <div class="print-section-header spirits-print-header">
+            <h2>基酒介紹 Spirits Introduction</h2>
+        </div>
+        <div class="spirits-intro">
+            <p data-en="Discover the soul of cocktails — base spirits and liqueurs. Every classic cocktail is built on the unique flavors of these essential spirits." data-zh="認識調酒的靈魂 — 基酒與利口酒。每一款經典調酒的背後，都有這些酒品獨特的風味作為基礎。">認識調酒的靈魂 — 基酒與利口酒。每一款經典調酒的背後，都有這些酒品獨特的風味作為基礎。</p>
+        </div>
+
+        <nav class="spirit-filter-nav">
+            <button class="filter-btn spirit-filter active" data-filter="all" data-en="All" data-zh="全部">全部 All</button>
+            <button class="filter-btn spirit-filter" data-filter="base" data-en="Base Spirits" data-zh="基酒">基酒 Base Spirits</button>
+            <button class="filter-btn spirit-filter" data-filter="liqueur" data-en="Liqueurs" data-zh="利口酒">利口酒 Liqueurs</button>
+            <button class="filter-btn spirit-filter" data-filter="syrup" data-en="Syrups" data-zh="糖漿">糖漿 Syrups</button>
+        </nav>
+
+        <main>
+            <div class="spirits-grid" id="spiritsGrid">
+                <!-- Base Spirits -->
+                
+                <!-- Jim Beam -->
+                <article class="spirit-card" data-category="base">
+                    <div class="bottle-visual">
+                        <img src="assets/JimBeamBourbon.png" alt="Jim Beam Bourbon" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Jim Beam</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh" data-en="Jim Beam White Bourbon" data-zh="金賓 波本威士忌">金賓 波本威士忌</h3>
+                        <p class="spirit-name-en">Jim Beam White Bourbon</p>
+                        <span class="spirit-type whiskey">Bourbon Whiskey</span>
+                        <p class="spirit-desc" data-en="The most iconic bourbon from Kentucky, USA, passed down since 1795. Made primarily from corn and aged in new charred oak barrels, featuring warm flavors of vanilla, caramel, and oak." data-zh="美國肯塔基州最具代表性的波本威士忌，自1795年傳承至今。以玉米為主要原料，在全新燒烤橡木桶中陳年，帶有香草、焦糖與橡木的溫潤風味。">美國肯塔基州最具代表性的波本威士忌，自1795年傳承至今。以玉米為主要原料，在全新燒烤橡木桶中陳年，帶有香草、焦糖與橡木的溫潤風味。</p>
+                        <p class="spirit-usage" data-en="<strong>Used in:</strong> Old Fashioned, Whiskey Sour, Manhattan" data-zh="<strong>常用調酒：</strong>Old Fashioned、Whiskey Sour、Manhattan"><strong>常用調酒：</strong>Old Fashioned、Whiskey Sour、Manhattan</p>
+                    </div>
+                </article>
+
+                <!-- Bacardi -->
+                <article class="spirit-card" data-category="base">
+                    <div class="bottle-visual">
+                        <img src="assets/BacardiWhiteRum.png" alt="Bacardi White Rum" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Bacardi</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh" data-en="Bacardi Superior White Rum" data-zh="百加得 白蘭姆酒">百加得 白蘭姆酒</h3>
+                        <p class="spirit-name-en">Bacardi Superior White Rum</p>
+                        <span class="spirit-type rum">White Rum</span>
+                        <p class="spirit-desc" data-en="A world-class rum brand from Cuba, known for its bat logo. The white rum is filtered through charcoal, resulting in a clear, crisp spirit with subtle notes of almond and vanilla." data-zh="源自古巴的世界級蘭姆酒品牌，以蝙蝠商標聞名。白蘭姆酒經過木炭過濾，呈現清澈透明，口感清爽帶有淡淡的杏仁與香草香氣。">源自古巴的世界級蘭姆酒品牌，以蝙蝠商標聞名。白蘭姆酒經過木炭過濾，呈現清澈透明，口感清爽帶有淡淡的杏仁與香草香氣。</p>
+                        <p class="spirit-usage" data-en="<strong>Used in:</strong> Mojito, Daiquiri, Piña Colada" data-zh="<strong>常用調酒：</strong>Mojito、Daiquiri、Piña Colada"><strong>常用調酒：</strong>Mojito、Daiquiri、Piña Colada</p>
+                    </div>
+                </article>
+
+                <!-- Havana Club -->
+                <article class="spirit-card" data-category="base">
+                    <div class="bottle-visual">
+                        <img src="assets/HavanaClub3.png" alt="Havana Club 3 Años" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Havana Club</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">哈瓦那俱樂部 3年蘭姆酒</h3>
+                        <p class="spirit-name-en">Havana Club 3 Años</p>
+                        <span class="spirit-type rum">Cuban Rum</span>
+                        <p class="spirit-desc">正宗古巴蘭姆酒，在古巴當地陳年3年。保留了古巴傳統蘭姆酒的純正風味，帶有甘蔗的天然甜香與微微的橡木氣息，是調製 Mojito 的經典選擇。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Golden Shine、Mojito、Cuba Libre</p>
+                    </div>
+                </article>
+
+                <!-- Absolut -->
+                <article class="spirit-card" data-category="base">
+                    <div class="bottle-visual">
+                        <img src="assets/AbsolutVodka.png" alt="Absolut Vodka" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Absolut</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh" data-en="Absolut Vodka" data-zh="瑞典絕對伏特加">瑞典絕對伏特加</h3>
+                        <p class="spirit-name-en">Absolut Vodka</p>
+                        <span class="spirit-type vodka">Vodka</span>
+                        <p class="spirit-desc" data-en="A premium vodka from Sweden, established in 1879. Made with winter wheat and pure deep water from southern Sweden, continuously distilled for a clean, smooth taste with virtually no impurities." data-zh="來自瑞典的頂級伏特加，自1879年創立。使用瑞典南部的冬麥與純淨深層水源，經過連續蒸餾製成，口感純淨滑順，幾乎無雜味。">來自瑞典的頂級伏特加，自1879年創立。使用瑞典南部的冬麥與純淨深層水源，經過連續蒸餾製成，口感純淨滑順，幾乎無雜味。</p>
+                        <p class="spirit-usage" data-en="<strong>Used in:</strong> Kamikaze, Long Island, Cosmopolitan" data-zh="<strong>常用調酒：</strong>Kamikaze、Long Island、Cosmopolitan"><strong>常用調酒：</strong>Kamikaze、Long Island、Cosmopolitan</p>
+                    </div>
+                </article>
+
+                <!-- Absolut Citron -->
+                <article class="spirit-card" data-category="base">
+                    <div class="bottle-visual">
+                        <img src="assets/AbsolutCitron.png" alt="Absolut Citron" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Absolut Citron</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">絕對伏特加 檸檬</h3>
+                        <p class="spirit-name-en">Absolut Citron Vodka</p>
+                        <span class="spirit-type vodka">Flavored Vodka</span>
+                        <p class="spirit-desc">Absolut 的經典風味款，融入天然檸檬萃取精華。保持伏特加的純淨基底，加上清新明亮的柑橘香氣，是調製水果風味調酒的絕佳選擇。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Lemon Drop、Citrus Martini</p>
+                    </div>
+                </article>
+
+                <!-- Beefeater -->
+                <article class="spirit-card" data-category="base">
+                    <div class="bottle-visual">
+                        <img src="assets/BeefeaterGin.png" alt="Beefeater Gin" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Beefeater</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">英人琴酒</h3>
+                        <p class="spirit-name-en">Beefeater London Dry Gin</p>
+                        <span class="spirit-type gin">London Dry Gin</span>
+                        <p class="spirit-desc">倫敦最具代表性的琴酒，自1863年由 James Burrough 創立。使用杜松子、柑橘皮、芫荽籽等九種植物配方，風味均衡，杜松子香氣濃郁。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Gin Tonic、Martini、Long Island</p>
+                    </div>
+                </article>
+
+                <!-- Jose Cuervo -->
+                <article class="spirit-card" data-category="base">
+                    <div class="bottle-visual">
+                        <img src="assets/JoseCuervoTequila.png" alt="Jose Cuervo Tequila" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Jose Cuervo</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">金快活 白龍舌蘭</h3>
+                        <p class="spirit-name-en">Jose Cuervo Especial Silver</p>
+                        <span class="spirit-type tequila">Tequila Blanco</span>
+                        <p class="spirit-desc">墨西哥最古老的龍舌蘭品牌，創立於1758年。白龍舌蘭未經陳年，保留藍色龍舌蘭的純粹風味，帶有清新的草本與胡椒香氣。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Margarita、Tequila Sunrise、Long Island</p>
+                    </div>
+                </article>
+
+                <!-- Remy Martin -->
+                <article class="spirit-card" data-category="base">
+                    <div class="bottle-visual">
+                        <img src="assets/RemyMartinVSOP.png" alt="Rémy Martin VSOP" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Rémy Martin</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">人頭馬 VSOP 干邑白蘭地</h3>
+                        <p class="spirit-name-en">Rémy Martin VSOP Cognac</p>
+                        <span class="spirit-type cognac">Cognac</span>
+                        <p class="spirit-desc">法國干邑區頂級白蘭地，專用大香檳區與小香檳區葡萄。VSOP 等級至少陳年4年，呈現深金琥珀色，帶有杏桃、蜂蜜與香草的複雜層次。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Alexander、Side Car、Brandy Sour</p>
+                    </div>
+                </article>
+
+                <!-- Martini Extra Dry -->
+                <article class="spirit-card" data-category="base">
+                    <div class="bottle-visual">
+                        <img src="assets/MartiniExtraDry.png" alt="Martini Extra Dry" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Martini</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">馬丁尼 純香艾酒</h3>
+                        <p class="spirit-name-en">Martini Extra Dry Vermouth</p>
+                        <span class="spirit-type vermouth">Dry Vermouth</span>
+                        <p class="spirit-desc">義大利經典香艾酒品牌，以白葡萄酒為基底，加入苦艾草等草本植物調味。Extra Dry 口感清爽不甜，是經典 Martini 調酒的必備材料。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Dry Martini、Gibson、Golden Shine</p>
+                    </div>
+                </article>
+
+                <!-- Liqueurs -->
+                
+                <!-- Cointreau -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/Cointreau.png" alt="Cointreau" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Cointreau</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh" data-en="Cointreau Liqueur" data-zh="法國君度香橙酒">法國君度香橙酒</h3>
+                        <p class="spirit-name-en">Cointreau Liqueur</p>
+                        <span class="spirit-type liqueur">Orange Liqueur</span>
+                        <p class="spirit-desc" data-en="A premium French orange liqueur, established in 1875. Made by distilling sweet and bitter orange peels, it's crystal clear with intense orange aroma, not overly sweet, at 40% ABV - the professional bartender's choice." data-zh="法國頂級橙皮酒，1875年創立。使用甜橙與苦橙皮蒸餾，透明澄澈，橙香濃郁但不過甜，酒精度40%，是專業調酒師的首選橙酒。">法國頂級橙皮酒，1875年創立。使用甜橙與苦橙皮蒸餾，透明澄澈，橙香濃郁但不過甜，酒精度40%，是專業調酒師的首選橙酒。</p>
+                        <p class="spirit-usage" data-en="<strong>Used in:</strong> Margarita, Long Island, Cosmopolitan" data-zh="<strong>常用調酒：</strong>Margarita、Long Island、Cosmopolitan"><strong>常用調酒：</strong>Margarita、Long Island、Cosmopolitan</p>
+                    </div>
+                </article>
+
+                <!-- Grand Marnier -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/GrandMarnier.png" alt="Grand Marnier" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Grand Marnier</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">柑曼怡 香甜酒</h3>
+                        <p class="spirit-name-en">Grand Marnier</p>
+                        <span class="spirit-type liqueur">Orange Liqueur</span>
+                        <p class="spirit-desc">法國頂級橙味利口酒，以干邑白蘭地為基底，加入苦橙精華。琥珀色澤，風味較 Cointreau 更為醇厚複雜，帶有白蘭地的陳年韻味。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Golden Shine、Grand Margarita</p>
+                    </div>
+                </article>
+
+                <!-- Kahlua -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/Kahlua.png" alt="Kahlúa" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Kahlúa</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">卡魯哇 咖啡香甜酒</h3>
+                        <p class="spirit-name-en">Kahlúa Coffee Liqueur</p>
+                        <span class="spirit-type liqueur">Coffee Liqueur</span>
+                        <p class="spirit-desc">墨西哥經典咖啡利口酒，使用阿拉比卡咖啡豆、蘭姆酒與香草製成。深棕色，帶有濃郁的烘焙咖啡香與焦糖甜味，是甜點調酒的靈魂。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>White Russian、Espresso Martini、B-52</p>
+                    </div>
+                </article>
+
+                <!-- Benedictine DOM -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/BenedictineDOM.png" alt="Bénédictine D.O.M" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Bénédictine</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">班尼狄克丁 DOM廊酒</h3>
+                        <p class="spirit-name-en">Bénédictine D.O.M</p>
+                        <span class="spirit-type liqueur">Herbal Liqueur</span>
+                        <p class="spirit-desc">法國諾曼第的傳奇草本利口酒，據傳配方源自16世紀本篤會修士。使用27種草本植物與香料，風味複雜神秘，帶有蜂蜜、香草與溫暖的香料氣息。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Singapore Sling、B&B</p>
+                    </div>
+                </article>
+
+                <!-- Campari -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/Campari.png" alt="Campari" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Campari</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">義大利金巴利香甜酒</h3>
+                        <p class="spirit-name-en">Campari Liqueur</p>
+                        <span class="spirit-type liqueur">Bitter Liqueur</span>
+                        <p class="spirit-desc">義大利經典苦味開胃酒，1860年由 Gaspare Campari 創造。鮮豔的紅色，獨特的苦甜風味來自神秘的草本配方，是義式餐前酒文化的代表。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Negroni、Americano、Campari Spritz</p>
+                    </div>
+                </article>
+
+                <!-- Dubonnet -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/DubonnetRed.png" alt="Dubonnet Red" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Dubonnet</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">多寶力紅酒</h3>
+                        <p class="spirit-name-en">Dubonnet Red</p>
+                        <span class="spirit-type liqueur">Aromatized Wine</span>
+                        <p class="spirit-desc">法國開胃酒，以紅葡萄酒為基底，加入奎寧與草本植物。深紅寶石色，風味甜中帶苦，曾是英國女王伊莉莎白二世的最愛飲品。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Dubonnet Cocktail、Queen's Drink</p>
+                    </div>
+                </article>
+
+                <!-- Kirsch -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/Kirsch.png" alt="Périgord Kirsch" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Kirsch</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">培可櫻桃白蘭地酒</h3>
+                        <p class="spirit-name-en">Périgord Kirsch</p>
+                        <span class="spirit-type liqueur">Cherry Brandy</span>
+                        <p class="spirit-desc">源自歐洲的櫻桃蒸餾酒，使用完整櫻桃（含果核）發酵蒸餾。透明無色，帶有純淨的櫻桃香氣與微微的杏仁韻味，常用於甜點與調酒。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Singapore Sling、Rose Cocktail</p>
+                    </div>
+                </article>
+
+                <!-- Marie Brizard Section -->
+                <div class="brand-header" style="grid-column: 1 / -1;">
+                    <h3>瑪莉白莎 Marie Brizard</h3>
+                    <p data-en="A renowned French liqueur brand founded in 1755 by Marie Brizard in Bordeaux. She was France's first female master distiller. The brand maintains the highest quality standards using natural ingredients with no artificial additives for over 260 years." data-zh="法國知名香甜酒品牌，1755年由 Marie Brizard 女士創立於波爾多，是法國第一位女性釀酒大師。堅持使用天然原料，無人工添加物，260年來始終維持最高品質標準。">法國知名香甜酒品牌，1755年由 Marie Brizard 女士創立於波爾多，是法國第一位女性釀酒大師。堅持使用天然原料，無人工添加物，260年來始終維持最高品質標準。</p>
+                </div>
+
+                <!-- MB White Cacao -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/MBWhiteCacao.png" alt="MB White Crème de Cacao" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>MB White Cacao</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">MB 白可可香甜酒</h3>
+                        <p class="spirit-name-en">Marie Brizard White Crème de Cacao</p>
+                        <span class="spirit-type liqueur">Cacao Liqueur</span>
+                        <p class="spirit-desc">透明的可可利口酒，保留純淨的巧克力風味而不影響調酒顏色。香氣細膩，帶有香草與可可豆的甜美氣息，是製作淺色甜點調酒的首選。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Grasshopper、Golden Cadillac</p>
+                    </div>
+                </article>
+
+                <!-- MB Brown Cacao -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/MBBrownCacao.png" alt="MB Brown Crème de Cacao" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>MB Brown Cacao</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">MB 棕可可香甜酒</h3>
+                        <p class="spirit-name-en">Marie Brizard Brown Crème de Cacao</p>
+                        <span class="spirit-type liqueur">Cacao Liqueur</span>
+                        <p class="spirit-desc">深棕色可可利口酒，風味比白可可更為濃郁厚實。帶有烘焙可可豆、黑巧克力與淡淡咖啡的層次，適合製作濃郁的巧克力風味調酒。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Alexander、Chocolate Lady</p>
+                    </div>
+                </article>
+
+                <!-- MB Green Menthe -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/MBGreenMenthe.png" alt="MB Green Crème de Menthe" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>MB Green Menthe</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">MB 綠薄荷香甜酒</h3>
+                        <p class="spirit-name-en">Marie Brizard Green Crème de Menthe</p>
+                        <span class="spirit-type liqueur">Mint Liqueur</span>
+                        <p class="spirit-desc">鮮綠色薄荷利口酒，使用天然薄荷萃取。清涼爽口，薄荷香氣純淨明亮，甜度適中。綠色外觀為調酒增添視覺層次，是製作 Grasshopper 的經典材料。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Grasshopper、Stinger、After Eight</p>
+                    </div>
+                </article>
+
+                <!-- MB Triple Sec -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/MBTripleSec.png" alt="MB Triple Sec" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>MB Triple Sec</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">MB 白柑橘香甜酒</h3>
+                        <p class="spirit-name-en">Marie Brizard Triple Sec</p>
+                        <span class="spirit-type liqueur">Orange Liqueur</span>
+                        <p class="spirit-desc">經典橙皮酒，混合海地苦橙皮與西班牙甜橙皮蒸餾。透明澄澈，橙香清新，苦甜平衡，是 Cointreau 的優質替代選擇，價格更為親民。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Kamikaze、Side Car、Margarita</p>
+                    </div>
+                </article>
+
+                <!-- MB Amaretto -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/MBAmaretto.png" alt="MB Amaretto" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>MB Amaretto</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">MB 杏仁甜酒</h3>
+                        <p class="spirit-name-en">Marie Brizard Amaretto No.45</p>
+                        <span class="spirit-type liqueur">Almond Liqueur</span>
+                        <p class="spirit-desc">義大利風格的杏仁利口酒，使用杏核萃取。琥珀色澤，香氣溫暖甜美，帶有杏仁、杏桃與香草的複合風味，常用於咖啡調酒與甜點。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Amaretto Sour、Godfather、Italian Coffee</p>
+                    </div>
+                </article>
+
+                <!-- MB Peach -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/MBPeach.png" alt="MB Peach Liqueur" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>MB Peach</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">MB 水蜜桃香甜酒</h3>
+                        <p class="spirit-name-en">Marie Brizard Peach Liqueur</p>
+                        <span class="spirit-type liqueur">Fruit Liqueur</span>
+                        <p class="spirit-desc">天然水蜜桃利口酒，捕捉成熟水蜜桃的甜美多汁。金黃色澤，香氣清新果香，甜度怡人，是調製水果風味調酒的絕佳選擇。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Sex on the Beach、Bellini、Fuzzy Navel</p>
+                    </div>
+                </article>
+
+                <!-- MB Cherry -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/MBJolieCherry.png" alt="MB Jolie Cherry" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>MB Cherry</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">MB 櫻桃白蘭地香甜酒</h3>
+                        <p class="spirit-name-en">Marie Brizard Jolie Cherry</p>
+                        <span class="spirit-type liqueur">Cherry Liqueur</span>
+                        <p class="spirit-desc">深紅色櫻桃利口酒，以白蘭地為基底浸泡櫻桃。風味濃郁甜美，帶有成熟櫻桃的果香與微微的杏仁餘韻，適合製作紅色系調酒。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Singapore Sling、Cherry Blossom</p>
+                    </div>
+                </article>
+
+                <!-- MB Raspberry -->
+                <article class="spirit-card" data-category="liqueur">
+                    <div class="bottle-visual">
+                        <img src="assets/MBFramboise.png" alt="MB Framboise" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>MB Framboise</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">MB 蔓覆盆子</h3>
+                        <p class="spirit-name-en">Marie Brizard Framboise No.24</p>
+                        <span class="spirit-type liqueur">Fruit Liqueur</span>
+                        <p class="spirit-desc">深紅寶石色覆盆子利口酒，使用新鮮覆盆子浸泡萃取。酸甜平衡，帶有覆盆子特有的莓果香氣與微酸尾韻，為調酒增添豐富的層次感。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>French Martini、Raspberry Collins</p>
+                    </div>
+                </article>
+
+                <!-- Syrups -->
+                
+                <!-- Monin Chocolate -->
+                <article class="spirit-card" data-category="syrup">
+                    <div class="bottle-visual">
+                        <img src="assets/MoninChocolate.png" alt="Monin Chocolate Syrup" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Monin Chocolate</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">Monin 巧克力風味糖漿</h3>
+                        <p class="spirit-name-en">Monin Chocolate Syrup</p>
+                        <span class="spirit-type syrup">Flavored Syrup</span>
+                        <p class="spirit-desc">法國 Monin 品牌的經典巧克力糖漿，無酒精配方。濃郁的可可風味，適合用於調酒、咖啡、奶昔與甜點裝飾，為飲品增添巧克力的誘人香氣。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Chocolate Lady、Chocolate Martini</p>
+                    </div>
+                </article>
+
+                <!-- Monin Grenadine -->
+                <article class="spirit-card" data-category="syrup">
+                    <div class="bottle-visual">
+                        <img src="assets/MoninGrenadine.png" alt="Monin Grenadine Syrup" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'bottle-placeholder\'>Monin Grenadine</div>';">
+                    </div>
+                    <div class="spirit-info">
+                        <h3 class="spirit-name-zh">Monin 紅石榴風味糖漿</h3>
+                        <p class="spirit-name-en">Monin Grenadine Syrup</p>
+                        <span class="spirit-type syrup">Flavored Syrup</span>
+                        <p class="spirit-desc">經典紅石榴糖漿，鮮豔的紅色是許多調酒的視覺靈魂。甜美的石榴風味帶有微酸，常用於製作漸層效果的調酒，如 Tequila Sunrise 的「日出」。</p>
+                        <p class="spirit-usage"><strong>常用調酒：</strong>Tequila Sunrise、Shirley Temple、Singapore Sling</p>
+                    </div>
+                </article>
+
+            </div>
+        </main>
+    </div>
+
+    <button class="print-btn" onclick="window.print()" data-en="Print Handout" data-zh="列印講義">列印講義</button>
 
     <footer>
-        <div class="footer-deco">Crafted with Elegance</div>
+        <div class="footer-deco" data-en="Crafted with Elegance" data-zh="精心調製">Crafted with Elegance</div>
     </footer>
 
     <script>
-        // Filter functionality
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const cards = document.querySelectorAll('.cocktail-card');
+        // Tab functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                
+                // Update active states
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Show/hide tab content
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${tabId}-tab`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Cocktail filter functionality
+        const filterBtns = document.querySelectorAll('.filter-nav .filter-btn:not(.spirit-filter)');
+        const cocktailCards = document.querySelectorAll('.cocktail-card');
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Update active state
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
                 const filter = btn.dataset.filter;
 
-                // Filter cards with animation
-                cards.forEach((card, index) => {
+                cocktailCards.forEach((card, index) => {
                     if (filter === 'all' || card.dataset.category === filter) {
                         card.classList.remove('hidden');
                         card.style.animation = 'none';
-                        card.offsetHeight; // Trigger reflow
+                        card.offsetHeight;
                         card.style.animation = `cardFadeIn 0.6s ease forwards`;
                         card.style.animationDelay = `${index * 0.05}s`;
                     } else {
@@ -855,13 +2030,127 @@
             });
         });
 
-        // Smooth scroll for any future anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+        // Spirit filter functionality
+        const spiritFilterBtns = document.querySelectorAll('.spirit-filter');
+        const spiritCards = document.querySelectorAll('.spirit-card');
+        const brandHeader = document.querySelector('.brand-header');
+
+        spiritFilterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                spiritFilterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                spiritCards.forEach((card, index) => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.classList.remove('hidden');
+                        card.style.animation = 'none';
+                        card.offsetHeight;
+                        card.style.animation = `cardFadeIn 0.6s ease forwards`;
+                        card.style.animationDelay = `${index * 0.03}s`;
+                    } else {
+                        card.classList.add('hidden');
+                    }
                 });
+
+                // Show/hide brand header based on filter
+                if (brandHeader) {
+                    if (filter === 'all' || filter === 'liqueur') {
+                        brandHeader.style.display = 'block';
+                    } else {
+                        brandHeader.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        // Language switching functionality
+        const langBtns = document.querySelectorAll('.lang-btn');
+        let currentLang = 'zh';
+
+        // Translation data for cocktail cards
+        const cocktailTranslations = {
+            'Golden Shine': { zh: '金色閃耀', en: 'Golden Shine' },
+            'Old Fashioned': { zh: '老式雞尾酒', en: 'Old Fashioned' },
+            'Daiquiri': { zh: '黛綺莉', en: 'Daiquiri' },
+            'Mojito': { zh: '莫希托', en: 'Mojito' },
+            'Tequila Sunrise': { zh: '龍舌蘭日出', en: 'Tequila Sunrise' },
+            'Long Island Iced Tea': { zh: '長島冰茶', en: 'Long Island Iced Tea' },
+            'Alexander': { zh: '亞歷山大', en: 'Alexander' },
+            'Chocolate Lady': { zh: '巧克力女士', en: 'Chocolate Lady' },
+            'Grasshopper': { zh: '綠蚱蜢', en: 'Grasshopper' },
+            'Kamikaze': { zh: '神風特攻隊', en: 'Kamikaze' },
+            'Side Car': { zh: '側車', en: 'Side Car' },
+            'Margarita': { zh: '瑪格麗特', en: 'Margarita' }
+        };
+
+        const sectionTitles = {
+            ingredients: { zh: '材料', en: 'Ingredients' },
+            method: { zh: '調製方法', en: 'Method' },
+            garnish: { zh: '裝飾', en: 'Garnish' },
+            usage: { zh: '常用調酒', en: 'Used in' }
+        };
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            
+            // Update lang buttons
+            langBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            // Update all elements with data-en and data-zh attributes
+            document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+                const text = lang === 'en' ? el.dataset.en : el.dataset.zh;
+                if (el.tagName === 'BUTTON' || el.classList.contains('tab-btn') || el.classList.contains('filter-btn')) {
+                    el.textContent = text;
+                } else {
+                    el.textContent = text;
+                }
+            });
+
+            // Update cocktail names
+            document.querySelectorAll('.cocktail-name-zh').forEach(el => {
+                const enName = el.nextElementSibling?.textContent || '';
+                const translation = cocktailTranslations[enName];
+                if (translation) {
+                    el.textContent = lang === 'en' ? translation.en : translation.zh;
+                }
+            });
+
+            // Update section titles
+            document.querySelectorAll('.section-title').forEach(el => {
+                const span = el.querySelector('span[data-en][data-zh]');
+                if (span) {
+                    span.textContent = lang === 'en' ? span.dataset.en : span.dataset.zh;
+                }
+            });
+
+            // Update spirit card descriptions and usage
+            document.querySelectorAll('.spirit-desc').forEach(el => {
+                if (el.dataset.en && el.dataset.zh) {
+                    el.textContent = lang === 'en' ? el.dataset.en : el.dataset.zh;
+                }
+            });
+
+            document.querySelectorAll('.spirit-usage').forEach(el => {
+                if (el.dataset.en && el.dataset.zh) {
+                    el.innerHTML = lang === 'en' ? el.dataset.en : el.dataset.zh;
+                }
+            });
+
+            // Update spirit names
+            document.querySelectorAll('.spirit-name-zh').forEach(el => {
+                if (el.dataset.en && el.dataset.zh) {
+                    el.textContent = lang === 'en' ? el.dataset.en : el.dataset.zh;
+                }
+            });
+        }
+
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchLanguage(btn.dataset.lang);
             });
         });
     </script>
