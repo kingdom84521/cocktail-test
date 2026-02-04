@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>調酒知識測驗 ｜ Cocktail Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Josefin+Sans:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a25;--gold:#d4af37;--gold-l:#f4e4ba;--gold-d:#a67c00;--cream:#f5f0e6;--muted:#9e9a92;--ok:#5cb85c;--ok-bg:rgba(92,184,92,.1);--no:#e54b4b;--no-bg:rgba(229,75,75,.1);--rose:#c77d8e;--mint:#7dc7a0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Josefin Sans','Noto Sans TC',sans-serif;background:var(--bg);color:var(--cream);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(212,175,55,.03),transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(199,125,142,.03),transparent 50%);pointer-events:none;z-index:0}
+
+.screen{display:none;position:relative;z-index:1}.screen.active{display:block}
+.flex-screen{display:none;position:relative;z-index:1;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center}
+.flex-screen.active{display:flex}
+
+.deco{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:25px}
+.deco::before,.deco::after{content:'';width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.deco-d{width:10px;height:10px;background:var(--gold);transform:rotate(45deg);position:relative}
+.deco-d::before{content:'';position:absolute;inset:3px;background:var(--bg)}
+h1.title{font-family:'Cormorant Garamond','Noto Sans TC',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;color:var(--gold-l);text-shadow:0 0 40px rgba(212,175,55,.3);letter-spacing:.08em;margin-bottom:6px}
+.subtitle{font-size:.85rem;color:var(--muted);letter-spacing:.3em;text-transform:uppercase}
+
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;max-width:850px;width:100%;margin:40px 0 35px}
+.mode{background:var(--bg2);border:1px solid rgba(212,175,55,.12);padding:28px 22px;cursor:pointer;transition:.35s;position:relative}
+.mode:hover{border-color:var(--gold);box-shadow:0 6px 28px rgba(212,175,55,.12);transform:translateY(-2px)}
+.mode.sel{border-color:var(--gold);background:rgba(212,175,55,.07)}
+.mode.sel::after{content:'✓';position:absolute;top:10px;right:14px;color:var(--gold);font-size:1.1rem}
+.mode-ico{font-size:2.2rem;margin-bottom:12px}
+.mode-t{font-family:'Cormorant Garamond','Noto Sans TC',serif;font-size:1.3rem;color:var(--gold-l);font-weight:600;margin-bottom:6px}
+.mode-d{font-size:.82rem;color:var(--muted);line-height:1.6}
+.mode-n{font-size:.78rem;color:var(--gold);margin-top:8px;font-weight:500}
+.go{background:linear-gradient(135deg,var(--gold-d),var(--gold));border:none;color:var(--bg);font-family:inherit;font-size:1.05rem;font-weight:600;letter-spacing:.12em;padding:15px 48px;cursor:pointer;transition:.3s;text-transform:uppercase}
+.go:hover{box-shadow:0 5px 25px rgba(212,175,55,.4);transform:translateY(-2px)}
+.go:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+
+.qh{position:sticky;top:0;z-index:50;background:rgba(10,10,15,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(212,175,55,.12);padding:14px 22px;display:flex;align-items:center;gap:18px}
+.qh-prog{flex:1}
+.qh-top{font-size:.78rem;color:var(--muted);margin-bottom:5px;display:flex;justify-content:space-between}
+.bar{height:4px;background:rgba(212,175,55,.12);overflow:hidden}.bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold));transition:width .4s}
+.qh-sc{text-align:right;min-width:90px}
+.qh-sc .num{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--gold-l)}
+.qh-sc .lbl{font-size:.68rem;color:var(--muted);letter-spacing:.1em}
+.qh-q{background:0;border:1px solid rgba(212,175,55,.2);color:var(--muted);padding:7px 14px;font-size:.78rem;cursor:pointer;font-family:inherit;transition:.3s}
+.qh-q:hover{border-color:var(--rose);color:var(--rose)}
+
+.qa{max-width:720px;margin:35px auto;padding:0 22px 80px}
+.q-cat{font-size:.72rem;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+.q-num{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--muted);margin-bottom:14px}
+.q-txt{font-family:'Noto Sans TC','Josefin Sans',sans-serif;font-size:1.2rem;color:var(--cream);line-height:1.8;margin-bottom:32px}
+.q-txt em{color:var(--gold-l);font-style:normal;font-weight:500}
+
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{background:var(--bg2);border:1px solid rgba(212,175,55,.1);padding:16px 20px;text-align:left;cursor:pointer;font-family:inherit;font-size:.95rem;color:var(--cream);transition:.3s;display:flex;align-items:center;gap:14px}
+.opt:hover:not(:disabled):not(.ok):not(.no){border-color:rgba(212,175,55,.35);background:var(--bg3)}
+.opt-l{width:28px;height:28px;border:1px solid rgba(212,175,55,.25);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:.88rem;color:var(--gold);flex-shrink:0;transition:.3s}
+.opt-t{flex:1;line-height:1.5}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg)}.opt.ok .opt-l{border-color:var(--ok);background:var(--ok);color:#fff}
+.opt.no{border-color:var(--no);background:var(--no-bg)}.opt.no .opt-l{border-color:var(--no);background:var(--no);color:#fff}
+.opt:disabled{cursor:default}
+
+.fb{margin-top:22px;padding:16px 20px;border-left:3px solid;font-size:.88rem;line-height:1.7;opacity:0;transform:translateY(8px);transition:.4s}
+.fb.show{opacity:1;transform:translateY(0)}
+.fb.fb-ok{border-color:var(--ok);background:var(--ok-bg);color:var(--mint)}
+.fb.fb-no{border-color:var(--no);background:var(--no-bg);color:var(--rose)}
+.fb b{color:var(--gold-l);font-weight:500}
+
+.nxt{margin-top:22px;background:linear-gradient(135deg,var(--gold-d),var(--gold));border:none;color:var(--bg);font-family:inherit;font-size:.95rem;font-weight:600;letter-spacing:.1em;padding:13px 36px;cursor:pointer;opacity:0;transform:translateY(8px);transition:.4s}
+.nxt.show{opacity:1;transform:translateY(0)}.nxt:hover{box-shadow:0 5px 20px rgba(212,175,55,.3)}
+
+.timer{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold-l);min-width:70px;text-align:center}
+
+.r-score{margin:25px 0}
+.r-big{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,8vw,6rem);font-weight:700;color:var(--gold-l);line-height:1}
+.r-det{font-size:1.05rem;color:var(--muted);margin-top:8px}
+.r-grade{font-family:'Cormorant Garamond','Noto Sans TC',serif;font-size:1.8rem;color:var(--gold);margin:12px 0 28px;font-weight:600}
+.r-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;max-width:700px;width:100%;margin-bottom:35px}
+.r-item{background:var(--bg2);border:1px solid rgba(212,175,55,.08);padding:18px}
+.r-lbl{font-size:.78rem;color:var(--muted);margin-bottom:4px}
+.r-val{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-l);font-weight:600}
+.r-val small{font-size:.65rem;color:var(--muted)}
+.r-acts{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.r-btn{padding:13px 32px;font-family:inherit;font-size:.9rem;font-weight:500;letter-spacing:.1em;cursor:pointer;transition:.3s}
+.r-btn.pri{background:linear-gradient(135deg,var(--gold-d),var(--gold));border:none;color:var(--bg)}
+.r-btn.sec{background:0;border:1px solid rgba(212,175,55,.25);color:var(--gold-l)}
+.r-btn:hover{transform:translateY(-2px);box-shadow:0 5px 20px rgba(212,175,55,.15)}
+
+.wr{max-width:720px;width:100%;margin:28px auto 0;text-align:left;display:none}
+.wr h3{font-family:'Cormorant Garamond','Noto Sans TC',serif;font-size:1.2rem;color:var(--gold-l);margin-bottom:14px;text-align:center}
+.wi{background:var(--bg2);border:1px solid rgba(229,75,75,.12);padding:14px 18px;margin-bottom:8px}
+.wi-q{font-size:.88rem;color:var(--cream);margin-bottom:5px;line-height:1.5}
+.wi-y{font-size:.8rem;color:var(--rose)}.wi-c{font-size:.8rem;color:var(--mint);margin-top:2px}
+
+@media(max-width:768px){.modes{grid-template-columns:1fr}.q-txt{font-size:1.05rem}.qh{padding:10px 14px;gap:10px}.timer{font-size:1.1rem}}
+</style>
+</head>
+<body>
+
+<!-- ═══ START ═══ -->
+<div id="scr-start" class="flex-screen active">
+<div class="deco"><div class="deco-d"></div></div>
+<h1 class="title">調酒知識測驗</h1>
+<p class="subtitle">Cocktail Knowledge Quiz &middot; 500 Questions</p>
+<div class="modes" id="modes">
+    <div class="mode" data-mode="50"><div class="mode-ico">🎲</div><div class="mode-t">隨機精選</div><div class="mode-d">從題庫中隨機抽取 50 題快速測驗</div><div class="mode-n">50 題</div></div>
+    <div class="mode" data-mode="100"><div class="mode-ico">🎯</div><div class="mode-t">百題挑戰</div><div class="mode-d">隨機 100 題，兼具深度與效率</div><div class="mode-n">100 題</div></div>
+    <div class="mode" data-mode="500"><div class="mode-ico">📋</div><div class="mode-t">完整測驗</div><div class="mode-d">挑戰全部 500 題，完整測試調酒知識</div><div class="mode-n">500 題</div></div>
+</div>
+<button class="go" id="go-btn" disabled>選擇模式開始測驗</button>
+</div>
+
+<!-- ═══ QUIZ ═══ -->
+<div id="scr-quiz" class="screen">
+<div class="qh">
+    <div class="qh-prog"><div class="qh-top"><span id="p-lbl"></span><span id="p-pct"></span></div><div class="bar"><div class="bar-fill" id="p-bar"></div></div></div>
+    <div class="timer" id="timer">00:00</div>
+    <div class="qh-sc"><div class="num" id="sc-live">0</div><div class="lbl">正確</div></div>
+    <button class="qh-q" id="quit-btn">結束</button>
+</div>
+<div class="qa" id="qa"></div>
+</div>
+
+<!-- ═══ RESULT ═══ -->
+<div id="scr-result" class="flex-screen">
+<div class="deco"><div class="deco-d"></div></div>
+<h1 class="title">測驗結果</h1>
+<div class="r-score"><div class="r-big" id="r-pct"></div><div class="r-det" id="r-det"></div></div>
+<div class="r-grade" id="r-grade"></div>
+<div id="r-time" style="color:var(--muted);margin-bottom:20px;font-size:.9rem"></div>
+<div class="r-grid" id="r-grid"></div>
+<div class="r-acts">
+    <button class="r-btn pri" id="r-retry">重新測驗</button>
+    <button class="r-btn sec" id="r-review">查看錯題</button>
+</div>
+<div class="wr" id="wr"></div>
+</div>
+
+<script>
+/* ════════════════ DATA ════════════════ */
+const C=[
+{id:1,en:"Golden Shine",zh:"金色閃耀",cat:"before-dinner",catZh:"餐前酒",m:"stir",gZh:"雞尾酒杯",
+ ing:[{zh:"哈瓦那3年蘭姆酒",en:"Rum (Havana 3 yrs)",a:"50 毫升"},{zh:"干邑橙皮甜酒",en:"Dry Orange Liqueur",a:"10 毫升"},{zh:"柑曼怡香橙甜酒",en:"Grand Marnier",a:"5 毫升"},{zh:"甜香艾酒",en:"Sweet Vermouth",a:"5 毫升"}],ga:"橙皮捲"},
+{id:2,en:"Old Fashioned",zh:"老式雞尾酒",cat:"before-dinner",catZh:"餐前酒",m:"muddle",gZh:"古典杯",
+ ing:[{zh:"波本威士忌",en:"Bourbon Whiskey",a:"45 毫升"},{zh:"安格式苦精",en:"Angostura Bitters",a:"2 抖振"},{zh:"方糖",en:"Sugar Cube",a:"1 顆"},{zh:"蘇打水",en:"Soda Water",a:"少量"}],ga:"柳橙片與櫻桃"},
+{id:3,en:"Daiquiri",zh:"黛綺莉",cat:"before-dinner",catZh:"餐前酒",m:"shake",gZh:"雞尾酒杯",
+ ing:[{zh:"白蘭姆酒",en:"White Rum",a:"45 毫升"},{zh:"新鮮萊姆汁",en:"Fresh Lime Juice",a:"20 毫升"},{zh:"糖漿",en:"Simple Syrup",a:"15 毫升"}],ga:"萊姆片"},
+{id:4,en:"Negroni",zh:"內格羅尼",cat:"before-dinner",catZh:"餐前酒",m:"stir",gZh:"古典杯",
+ ing:[{zh:"琴酒",en:"Gin",a:"30 毫升"},{zh:"金巴利",en:"Campari",a:"30 毫升"},{zh:"甜香艾酒",en:"Sweet Vermouth",a:"30 毫升"}],ga:"橙皮"},
+{id:5,en:"Queen's Dubonnet",zh:"女王杜本內",cat:"before-dinner",catZh:"餐前酒",m:"stir",gZh:"雞尾酒杯",
+ ing:[{zh:"琴酒",en:"Gin",a:"30 毫升"},{zh:"紅杜本內",en:"Red Dubonnet",a:"45 毫升"}],ga:"檸檬皮捲"},
+{id:6,en:"Whiskey Sour",zh:"威士忌酸酒",cat:"before-dinner",catZh:"餐前酒",m:"shake",gZh:"古典杯",
+ ing:[{zh:"波本威士忌",en:"Bourbon Whiskey",a:"45 毫升"},{zh:"新鮮檸檬汁",en:"Fresh Lemon Juice",a:"30 毫升"},{zh:"糖漿",en:"Sugar Syrup",a:"15 毫升"}],ga:"櫻桃與柳橙片"},
+{id:7,en:"Gin Tonic",zh:"琴通寧",cat:"long-drink",catZh:"長飲",m:"build",gZh:"高球杯",
+ ing:[{zh:"琴酒",en:"Gin",a:"45 毫升"},{zh:"通寧水",en:"Tonic Water",a:"補滿"}],ga:"萊姆角"},
+{id:8,en:"Mojito",zh:"莫希托",cat:"long-drink",catZh:"長飲",m:"muddle",gZh:"高球杯",
+ ing:[{zh:"白蘭姆酒",en:"White Rum",a:"45 毫升"},{zh:"新鮮萊姆汁",en:"Fresh Lime Juice",a:"20 毫升"},{zh:"白砂糖",en:"Sugar",a:"2 吧匙"},{zh:"薄荷葉",en:"Mint Leaves",a:"12 片"},{zh:"蘇打水",en:"Soda Water",a:"補滿"}],ga:"薄荷枝與萊姆"},
+{id:9,en:"Singapore Sling",zh:"新加坡司令",cat:"long-drink",catZh:"長飲",m:"shake",gZh:"颶風杯",
+ ing:[{zh:"琴酒",en:"Gin",a:"30 毫升"},{zh:"櫻桃甜酒",en:"Cherry Liqueur",a:"15 毫升"},{zh:"君度橙酒",en:"Cointreau",a:"10 毫升"},{zh:"本篤甜酒",en:"DOM Bénédictine",a:"10 毫升"},{zh:"新鮮鳳梨汁",en:"Fresh Pineapple Juice",a:"120 毫升"},{zh:"新鮮萊姆汁",en:"Fresh Lime Juice",a:"15 毫升"},{zh:"紅石榴糖漿",en:"Grenadine Syrup",a:"10 毫升"},{zh:"安格式苦精",en:"Angostura Bitters",a:"1 抖振"}],ga:"鳳梨片與櫻桃"},
+{id:10,en:"Tequila Sunrise",zh:"龍舌蘭日出",cat:"long-drink",catZh:"長飲",m:"build",gZh:"高球杯",
+ ing:[{zh:"龍舌蘭",en:"Tequila",a:"45 毫升"},{zh:"新鮮柳橙汁",en:"Fresh Orange Juice",a:"90 毫升"},{zh:"紅石榴糖漿",en:"Grenadine Syrup",a:"15 毫升"}],ga:"柳橙片與櫻桃"},
+{id:11,en:"Sex on the Beach",zh:"海灘情人",cat:"long-drink",catZh:"長飲",m:"shake",gZh:"高球杯",
+ ing:[{zh:"伏特加",en:"Vodka",a:"40 毫升"},{zh:"水蜜桃甜酒",en:"Peach Liqueur",a:"20 毫升"},{zh:"新鮮柳橙汁",en:"Fresh Orange Juice",a:"40 毫升"},{zh:"蔓越莓汁",en:"Cranberry Juice",a:"40 毫升"}],ga:"柳橙片"},
+{id:12,en:"Long Island Iced Tea",zh:"長島冰茶",cat:"long-drink",catZh:"長飲",m:"build",gZh:"可林杯",
+ ing:[{zh:"伏特加",en:"Vodka",a:"15 毫升"},{zh:"琴酒",en:"Gin",a:"15 毫升"},{zh:"龍舌蘭",en:"Tequila",a:"15 毫升"},{zh:"白蘭姆酒",en:"White Rum",a:"15 毫升"},{zh:"君度橙酒",en:"Cointreau",a:"15 毫升"},{zh:"檸檬汁",en:"Lemon Juice",a:"25 毫升"},{zh:"糖漿",en:"Simple Syrup",a:"30 毫升"},{zh:"可樂",en:"Cola",a:"補滿"}],ga:"檸檬角"},
+{id:13,en:"Alexander",zh:"亞歷山大",cat:"after-dinner",catZh:"餐後酒",m:"shake",gZh:"雞尾酒杯",
+ ing:[{zh:"白蘭地",en:"Brandy",a:"30 毫升"},{zh:"深色可可酒",en:"Brown Crème de Cacao",a:"30 毫升"},{zh:"鮮奶油",en:"Fresh Cream",a:"30 毫升"}],ga:"豆蔻粉"},
+{id:14,en:"Angel's Kiss",zh:"天使之吻",cat:"after-dinner",catZh:"餐後酒",m:"layer",gZh:"利口酒杯",
+ ing:[{zh:"深色可可酒",en:"Brown Crème de Cacao",a:"3/4（約 45 毫升）"},{zh:"鮮奶油",en:"Fresh Cream",a:"1/4（約 15 毫升）"}],ga:"插籤櫻桃"},
+{id:15,en:"B-52",zh:"B-52轟炸機",cat:"after-dinner",catZh:"餐後酒",m:"layer",gZh:"烈酒杯",
+ ing:[{zh:"卡魯哇咖啡甜酒",en:"Kahlúa",a:"20 毫升"},{zh:"貝禮詩奶酒",en:"Bailey's Cream",a:"20 毫升"},{zh:"柑曼怡香橙甜酒",en:"Grand Marnier",a:"20 毫升"}],ga:"可點火"},
+{id:16,en:"Grasshopper",zh:"綠蚱蜢",cat:"after-dinner",catZh:"餐後酒",m:"shake",gZh:"雞尾酒杯",
+ ing:[{zh:"白色可可酒",en:"White Crème de Cacao",a:"20 毫升"},{zh:"綠薄荷酒",en:"Green Crème de Menthe",a:"20 毫升"},{zh:"鮮奶油",en:"Fresh Cream",a:"20 毫升"}],ga:"薄荷葉"},
+{id:17,en:"Chocolate Lady",zh:"巧克力女士",cat:"after-dinner",catZh:"餐後酒",m:"float",gZh:"大雞尾酒杯",
+ ing:[{zh:"威士忌",en:"Whisky",a:"30 毫升"},{zh:"深色可可酒",en:"Brown Crème de Cacao",a:"30 毫升"},{zh:"巧克力醬",en:"Chocolate Syrup",a:"30 毫升"},{zh:"鮮奶油",en:"Fresh Cream",a:"30 毫升"}],ga:"巧克力粉"},
+{id:18,en:"Sweet Formula",zh:"甜蜜配方",cat:"after-dinner",catZh:"餐後酒",m:"float",gZh:"雞尾酒杯",
+ ing:[{zh:"格蘭特威士忌",en:"Grant's Whisky",a:"40 毫升"},{zh:"南瓜果泥",en:"Pumpkin Reàl Purée",a:"10 毫升"},{zh:"水蜜桃果泥",en:"Peach Reàl Purée",a:"10 毫升"},{zh:"巧克力醬",en:"Chocolate Syrup",a:"20 毫升"},{zh:"鮮奶油",en:"Fresh Cream",a:"30 毫升"}],ga:"巧克力醬淋飾"},
+{id:19,en:"Kamikaze",zh:"神風特攻隊",cat:"all-day",catZh:"全天候",m:"shake",gZh:"雞尾酒杯",
+ ing:[{zh:"伏特加",en:"Vodka",a:"30 毫升"},{zh:"白橙皮甜酒",en:"Triple Sec",a:"30 毫升"},{zh:"新鮮萊姆汁",en:"Fresh Lime Juice",a:"30 毫升"}],ga:"萊姆角"},
+{id:20,en:"Side Car",zh:"側車",cat:"all-day",catZh:"全天候",m:"shake",gZh:"雞尾酒杯（糖口杯）",
+ ing:[{zh:"白蘭地",en:"Brandy",a:"40 毫升"},{zh:"白橙皮甜酒",en:"Triple Sec",a:"20 毫升"},{zh:"新鮮檸檬汁",en:"Fresh Lemon Juice",a:"20 毫升"}],ga:"檸檬皮捲"},
+{id:21,en:"Margarita",zh:"瑪格麗特",cat:"all-day",catZh:"全天候",m:"shake",gZh:"瑪格麗特杯（鹽口杯）",
+ ing:[{zh:"龍舌蘭",en:"Tequila",a:"35 毫升"},{zh:"君度橙酒",en:"Cointreau",a:"20 毫升"},{zh:"新鮮萊姆汁",en:"Fresh Lime Juice",a:"15 毫升"}],ga:"萊姆角"},
+{id:22,en:"Cosmopolitan",zh:"柯夢波丹",cat:"all-day",catZh:"全天候",m:"shake",gZh:"雞尾酒杯",
+ ing:[{zh:"檸檬伏特加",en:"Vodka Citron",a:"40 毫升"},{zh:"君度橙酒",en:"Cointreau",a:"15 毫升"},{zh:"新鮮萊姆汁",en:"Fresh Lime Juice",a:"15 毫升"},{zh:"蔓越莓汁",en:"Cranberry Juice",a:"30 毫升"}],ga:"火烤橙皮"},
+{id:23,en:"Black Russian",zh:"黑俄羅斯",cat:"all-day",catZh:"全天候",m:"build",gZh:"古典杯",
+ ing:[{zh:"伏特加",en:"Vodka",a:"50 毫升"},{zh:"卡魯哇咖啡甜酒",en:"Kahlúa",a:"20 毫升"}],ga:"無"},
+{id:24,en:"Screwdriver",zh:"螺絲起子",cat:"all-day",catZh:"全天候",m:"build",gZh:"高球杯",
+ ing:[{zh:"伏特加",en:"Vodka",a:"50 毫升"},{zh:"新鮮柳橙汁",en:"Fresh Orange Juice",a:"補滿"}],ga:"柳橙片"}
+];
+
+const MN={shake:"搖盪法",stir:"攪拌法",build:"直調法",muddle:"搗壓法",layer:"分層法",float:"漂浮法"};
+const CN={"before-dinner":"餐前酒","long-drink":"長飲","after-dinner":"餐後酒","all-day":"全天候"};
+
+const SP=[
+{zh:"金賓波本威士忌",en:"Jim Beam White Bourbon",tp:"波本威士忌",cat:"基酒",usg:"老式雞尾酒、威士忌酸酒"},
+{zh:"百加得白蘭姆酒",en:"Bacardi Superior White Rum",tp:"白蘭姆酒",cat:"基酒",usg:"莫希托、黛綺莉、金色閃耀"},
+{zh:"哈瓦那俱樂部3年蘭姆酒",en:"Havana Club 3 Años",tp:"白蘭姆酒",cat:"基酒",usg:"金色閃耀、莫希托"},
+{zh:"瑞典絕對伏特加",en:"Absolut Vodka",tp:"伏特加",cat:"基酒",usg:"神風特攻隊、長島冰茶、黑俄羅斯"},
+{zh:"瑞典絕對檸檬伏特加",en:"Absolut Citron",tp:"調味伏特加",cat:"基酒",usg:"柯夢波丹"},
+{zh:"英人琴酒",en:"Beefeater London Dry Gin",tp:"倫敦乾琴酒",cat:"基酒",usg:"琴通寧、新加坡司令、長島冰茶"},
+{zh:"乎乎乎金快活龍舌蘭",en:"Jose Cuervo Especial Tequila",tp:"龍舌蘭",cat:"基酒",usg:"瑪格麗特、龍舌蘭日出、長島冰茶"},
+{zh:"人頭馬特優香檳干邑",en:"Rémy Martin VSOP Cognac",tp:"干邑白蘭地",cat:"基酒",usg:"亞歷山大、側車"},
+{zh:"馬丁尼純香苦艾酒",en:"Martini Extra Dry Vermouth",tp:"不甜苦艾酒",cat:"基酒",usg:"馬丁尼、金色閃耀"},
+{zh:"法國君度香橙酒",en:"Cointreau",tp:"橙皮甜酒",cat:"利口酒",usg:"瑪格麗特、長島冰茶、柯夢波丹"},
+{zh:"柑曼怡香橙甜酒",en:"Grand Marnier Cordon Rouge",tp:"橙皮甜酒",cat:"利口酒",usg:"金色閃耀、B-52轟炸機"},
+{zh:"卡魯哇咖啡甜酒",en:"Kahlúa Coffee Liqueur",tp:"咖啡甜酒",cat:"利口酒",usg:"黑俄羅斯、B-52轟炸機"},
+{zh:"班尼狄克丁甜酒",en:"Bénédictine D.O.M",tp:"草本甜酒",cat:"利口酒",usg:"新加坡司令"},
+{zh:"金巴利苦酒",en:"Campari",tp:"苦味利口酒",cat:"利口酒",usg:"內格羅尼"},
+{zh:"多寶力紅酒",en:"Dubonnet Red",tp:"加味葡萄酒",cat:"利口酒",usg:"女王杜本內"},
+{zh:"瑪莉白莎白可可甜酒",en:"Marie Brizard White Crème de Cacao",tp:"可可甜酒",cat:"利口酒",usg:"綠蚱蜢"},
+{zh:"瑪莉白莎棕可可甜酒",en:"Marie Brizard Brown Crème de Cacao",tp:"可可甜酒",cat:"利口酒",usg:"亞歷山大、天使之吻、巧克力女士"},
+{zh:"瑪莉白莎綠薄荷甜酒",en:"Marie Brizard Green Crème de Menthe",tp:"薄荷甜酒",cat:"利口酒",usg:"綠蚱蜢"},
+{zh:"瑪莉白莎白橙皮甜酒",en:"Marie Brizard Triple Sec",tp:"橙皮甜酒",cat:"利口酒",usg:"神風特攻隊、側車"},
+{zh:"瑪莉白莎杏仁甜酒",en:"Marie Brizard Amaretto",tp:"杏仁甜酒",cat:"利口酒",usg:"教父、杏仁酸酒"},
+{zh:"瑪莉白莎水蜜桃甜酒",en:"Marie Brizard Peach Liqueur",tp:"水蜜桃甜酒",cat:"利口酒",usg:"海灘情人"},
+{zh:"瑪莉白莎櫻桃白蘭地甜酒",en:"Marie Brizard Jolie Cherry",tp:"櫻桃甜酒",cat:"利口酒",usg:"新加坡司令"},
+{zh:"瑪莉白莎覆盆子甜酒",en:"Marie Brizard Framboise",tp:"覆盆子甜酒",cat:"利口酒",usg:"覆盆子馬丁尼"},
+{zh:"莫林巧克力糖漿",en:"Monin Chocolate Syrup",tp:"巧克力糖漿",cat:"糖漿",usg:"巧克力女士、甜蜜配方"},
+{zh:"莫林紅石榴糖漿",en:"Monin Grenadine Syrup",tp:"紅石榴糖漿",cat:"糖漿",usg:"龍舌蘭日出、新加坡司令"}
+];
+
+/* ════════════════ HELPERS ════════════════ */
+function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function pick(a,n,ex){const p=a.filter(x=>!ex||!ex.includes(x));return shuf(p).slice(0,n);}
+function pickOne(a,ex){return pick(a,1,ex)[0];}
+function uniq(a){return[...new Set(a)];}
+
+const allM=Object.values(MN),allG=uniq(C.map(c=>c.gZh)),allCat=Object.values(CN),allGa=uniq(C.map(c=>c.ga));
+const allIng=uniq(C.flatMap(c=>c.ing.map(i=>i.zh))),allAmt=uniq(C.flatMap(c=>c.ing.map(i=>i.a)));
+const allCZh=C.map(c=>c.zh),allCEn=C.map(c=>c.en);
+
+function q(cat,txt,ans,wrongs){return{cat,txt,ans,opts:shuf([ans,...wrongs.slice(0,3)])};}
+
+/* ════════════════ QUESTION GENERATOR ════════════════ */
+function generate(){
+const Q=[];
+
+C.forEach(c=>{
+    Q.push(q('調製技法',`「${c.zh}」使用什麼調製方法？`,MN[c.m],pick(allM,3,[MN[c.m]])));
+    Q.push(q('杯具知識',`「${c.zh}」使用什麼杯子？`,c.gZh,pick(allG,3,[c.gZh])));
+    Q.push(q('酒款分類',`「${c.zh}」屬於哪一個分類？`,c.catZh,pick(allCat,3,[c.catZh])));
+    Q.push(q('裝飾搭配',`「${c.zh}」的裝飾物是什麼？`,c.ga,pick(allGa,3,[c.ga])));
+    const ci=pickOne(c.ing.map(i=>i.zh));
+    Q.push(q('材料辨識',`以下哪個是「${c.zh}」的材料？`,ci,pick(allIng,3,c.ing.map(i=>i.zh))));
+    const ni=pickOne(allIng,c.ing.map(i=>i.zh));
+    if(ni)Q.push(q('材料辨識',`以下哪個<em>不是</em>「${c.zh}」的材料？`,ni,pick(c.ing.map(i=>i.zh),3)));
+    const cnt=String(c.ing.length);
+    Q.push(q('配方結構',`「${c.zh}」共有幾種材料？`,cnt,pick(['2','3','4','5','6','7','8'].filter(x=>x!==cnt),3)));
+    Q.push(q('中英對照',`「${c.zh}」的英文名稱是什麼？`,c.en,pick(allCEn,3,[c.en])));
+    Q.push(q('中英對照',`「${c.en}」的中文名稱是什麼？`,c.zh,pick(allCZh,3,[c.zh])));
+    shuf(c.ing).slice(0,2).forEach(ig=>{
+        const wa=pick(allAmt,3,[ig.a]);
+        if(wa.length>=3) Q.push(q('用量記憶',`「${c.zh}」中「${ig.zh}」的用量是多少？`,ig.a,wa));
+    });
+});
+
+const i2c={};
+C.forEach(c=>c.ing.forEach(i=>{if(!i2c[i.zh])i2c[i.zh]=[];i2c[i.zh].push(c.zh);}));
+Object.entries(i2c).forEach(([ing,cs])=>{
+    const cor=pickOne(cs),wr=pick(allCZh,3,cs);
+    if(wr.length>=3) Q.push(q('材料辨識',`以下哪杯調酒使用了「${ing}」？`,cor,wr));
+});
+
+Object.entries(MN).forEach(([k,n])=>{
+    const yes=C.filter(c=>c.m===k).map(c=>c.zh),no=C.filter(c=>c.m!==k).map(c=>c.zh);
+    if(yes.length&&no.length>=3){
+        Q.push(q('調製技法',`以下哪杯調酒使用「${n}」？`,pickOne(yes),pick(no,3)));
+        Q.push(q('調製技法',`以下哪杯調酒<em>不是</em>使用「${n}」？`,pickOne(no),pick(yes,3).slice(0,3)));
+    }
+});
+
+Object.entries(CN).forEach(([k,n])=>{
+    const yes=C.filter(c=>c.cat===k).map(c=>c.zh),no=C.filter(c=>c.cat!==k).map(c=>c.zh);
+    if(yes.length&&no.length>=3){
+        Q.push(q('酒款分類',`以下哪杯調酒屬於「${n}」？`,pickOne(yes),pick(no,3)));
+        Q.push(q('酒款分類',`以下哪杯調酒<em>不是</em>「${n}」？`,pickOne(no),pick(yes,3).slice(0,3)));
+    }
+});
+
+const g2c={};C.forEach(c=>{if(!g2c[c.gZh])g2c[c.gZh]=[];g2c[c.gZh].push(c.zh);});
+Object.entries(g2c).forEach(([g,cs])=>{
+    const no=C.filter(c=>c.gZh!==g).map(c=>c.zh);
+    if(no.length>=3) Q.push(q('杯具知識',`以下哪杯調酒使用「${g}」？`,pickOne(cs),pick(no,3)));
+});
+
+const ga2c={};C.forEach(c=>{if(!ga2c[c.ga])ga2c[c.ga]=[];ga2c[c.ga].push(c.zh);});
+Object.entries(ga2c).forEach(([g,cs])=>{
+    const no=C.filter(c=>c.ga!==g).map(c=>c.zh);
+    if(no.length>=3) Q.push(q('裝飾搭配',`以下哪杯調酒的裝飾物是「${g}」？`,pickOne(cs),pick(no,3)));
+});
+
+const allSpZh=SP.map(s=>s.zh),allSpEn=SP.map(s=>s.en),allSpTp=uniq(SP.map(s=>s.tp)),allSpCat=uniq(SP.map(s=>s.cat));
+SP.forEach(s=>{
+    Q.push(q('基酒知識',`「${s.zh}」屬於什麼類型？`,s.tp,pick(allSpTp,3,[s.tp])));
+    Q.push(q('基酒知識',`「${s.zh}」的英文名稱是什麼？`,s.en,pick(allSpEn,3,[s.en])));
+    Q.push(q('基酒知識',`「${s.en}」的中文名稱是什麼？`,s.zh,pick(allSpZh,3,[s.zh])));
+    Q.push(q('基酒知識',`「${s.zh}」屬於以下哪個大分類？`,s.cat,pick(allSpCat,3,[s.cat])));
+    if(s.usg){const us=s.usg.split('、'),cor=pickOne(us),wr=pick(allCZh,3,us);
+        if(cor&&wr.length>=3) Q.push(q('基酒知識',`「${s.zh}」常用於以下哪杯調酒？`,cor,wr));}
+});
+
+const ingPairs=[];C.forEach(c=>c.ing.forEach(i=>{if(!ingPairs.find(p=>p.zh===i.zh))ingPairs.push(i);}));
+shuf(ingPairs).slice(0,30).forEach(p=>Q.push(q('材料翻譯',`「${p.en}」的中文名稱是什麼？`,p.zh,pick(ingPairs.map(x=>x.zh),3,[p.zh]))));
+shuf(ingPairs).slice(0,20).forEach(p=>Q.push(q('材料翻譯',`「${p.zh}」的英文名稱是什麼？`,p.en,pick(ingPairs.map(x=>x.en),3,[p.en]))));
+
+for(let i=0;i<10;i++){
+    const s4=shuf(C).slice(0,4);
+    const most=s4.reduce((a,b)=>a.ing.length>b.ing.length?a:b);
+    Q.push(q('配方結構',`以下哪杯調酒的材料種類最多？`,most.zh,s4.filter(x=>x!==most).map(x=>x.zh)));
+    const least=s4.reduce((a,b)=>a.ing.length<b.ing.length?a:b);
+    Q.push(q('配方結構',`以下哪杯調酒的材料種類最少？`,least.zh,s4.filter(x=>x!==least).map(x=>x.zh)));
+}
+
+C.forEach(c=>c.ing.forEach(ig=>{
+    const wa=pick(allAmt,3,[ig.a]);
+    if(wa.length>=3) Q.push(q('用量記憶',`在「${c.zh}」的配方中，「${ig.zh}」需要多少？`,ig.a,wa));
+}));
+
+const seen=new Set(),unique=[];
+for(const item of shuf(Q)){
+    if(item.opts.length!==4)continue;
+    const key=item.txt+item.ans;
+    if(!seen.has(key)){seen.add(key);unique.push(item);}
+    if(unique.length>=500)break;
+}
+return unique;
+}
+
+/* ════════════════ QUIZ ENGINE ════════════════ */
+let mode,questions,idx,score,wrongs,catSt,answered,timerSec,timerID;
+
+document.getElementById('modes').addEventListener('click',e=>{
+    const card=e.target.closest('.mode');if(!card)return;
+    document.querySelectorAll('.mode').forEach(m=>m.classList.remove('sel'));
+    card.classList.add('sel');mode=+card.dataset.mode;
+    const btn=document.getElementById('go-btn');btn.disabled=false;
+    btn.textContent=`開始 ${mode} 題測驗`;
+});
+document.getElementById('go-btn').addEventListener('click',startQuiz);
+document.getElementById('quit-btn').addEventListener('click',()=>{if(confirm('確定要結束測驗嗎？'))endQuiz();});
+document.getElementById('r-retry').addEventListener('click',()=>location.reload());
+document.getElementById('r-review').addEventListener('click',toggleReview);
+
+function startQuiz(){
+    const all=generate();
+    questions=mode>=500?all:shuf(all).slice(0,mode);
+    idx=0;score=0;wrongs=[];catSt={};answered=false;timerSec=0;
+    show('scr-quiz');startTimer();render();
+}
+function show(id){document.querySelectorAll('.screen,.flex-screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function startTimer(){clearInterval(timerID);timerSec=0;timerID=setInterval(()=>{timerSec++;const m=String(Math.floor(timerSec/60)).padStart(2,'0'),s=String(timerSec%60).padStart(2,'0');document.getElementById('timer').textContent=m+':'+s;},1000);}
+
+function render(){
+    const qn=questions[idx],total=questions.length,pct=Math.round(idx/total*100);
+    document.getElementById('p-lbl').textContent=`第 ${idx+1} 題 / 共 ${total} 題`;
+    document.getElementById('p-pct').textContent=pct+'%';
+    document.getElementById('p-bar').style.width=pct+'%';
+    document.getElementById('sc-live').textContent=score;
+    const labels=['A','B','C','D'];
+    document.getElementById('qa').innerHTML=`
+        <div class="q-cat">${qn.cat}</div>
+        <div class="q-num">Question ${idx+1}</div>
+        <div class="q-txt">${qn.txt}</div>
+        <div class="opts" id="opts">${qn.opts.map((o,i)=>`<button class="opt" data-idx="${i}"><span class="opt-l">${labels[i]}</span><span class="opt-t">${o}</span></button>`).join('')}</div>
+        <div class="fb" id="fb"></div>
+        <button class="nxt" id="nxt">${idx<total-1?'下一題 →':'查看結果'}</button>`;
+    answered=false;
+    document.getElementById('opts').addEventListener('click',e=>{const btn=e.target.closest('.opt');if(!btn||answered)return;choose(btn);});
+    document.getElementById('nxt').addEventListener('click',next);
+}
+
+function choose(btn){
+    answered=true;const qn=questions[idx],selected=btn.querySelector('.opt-t').textContent,correct=qn.ans,isOk=selected===correct;
+    if(!catSt[qn.cat])catSt[qn.cat]={t:0,c:0};catSt[qn.cat].t++;
+    document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;const txt=b.querySelector('.opt-t').textContent;if(txt===correct)b.classList.add('ok');if(txt===selected&&!isOk)b.classList.add('no');});
+    const fb=document.getElementById('fb');
+    if(isOk){score++;catSt[qn.cat].c++;fb.className='fb fb-ok show';fb.innerHTML='✓ 正確！';}
+    else{fb.className='fb fb-no show';fb.innerHTML=`✗ 正確答案：<b>${correct}</b>`;wrongs.push({q:qn.txt,y:selected,a:correct});}
+    document.getElementById('sc-live').textContent=score;document.getElementById('nxt').classList.add('show');
+}
+
+function next(){idx++;if(idx>=questions.length)endQuiz();else{render();window.scrollTo({top:0,behavior:'smooth'});}}
+
+function endQuiz(){
+    clearInterval(timerID);const total=questions.length,pct=Math.round(score/total*100);
+    let grade='';
+    if(pct>=95)grade='🏆 調酒大師 Master Bartender';
+    else if(pct>=85)grade='🥇 資深調酒師 Senior Bartender';
+    else if(pct>=75)grade='🥈 合格調酒師 Bartender';
+    else if(pct>=60)grade='🥉 調酒學徒 Apprentice';
+    else grade='📚 繼續加油 Keep Learning';
+    document.getElementById('r-pct').textContent=pct+'%';
+    document.getElementById('r-det').textContent=`${score} / ${total}`;
+    document.getElementById('r-grade').textContent=grade;
+    const m=Math.floor(timerSec/60),s=timerSec%60;
+    document.getElementById('r-time').textContent=`⏱ 用時 ${m} 分 ${s} 秒`;
+    let html=`<div class="r-item"><div class="r-lbl">總題數</div><div class="r-val">${total}</div></div>
+        <div class="r-item"><div class="r-lbl">答對</div><div class="r-val" style="color:var(--mint)">${score}</div></div>
+        <div class="r-item"><div class="r-lbl">答錯</div><div class="r-val" style="color:var(--rose)">${total-score}</div></div>`;
+    Object.entries(catSt).sort((a,b)=>b[1].t-a[1].t).forEach(([cat,s])=>{
+        const cp=s.t?Math.round(s.c/s.t*100):0;
+        html+=`<div class="r-item"><div class="r-lbl">${cat}</div><div class="r-val">${cp}% <small>(${s.c}/${s.t})</small></div></div>`;
+    });
+    document.getElementById('r-grid').innerHTML=html;
+    if(wrongs.length){let rh=`<h3>錯題回顧（共 ${wrongs.length} 題）</h3>`;
+        wrongs.forEach((w,i)=>{rh+=`<div class="wi"><div class="wi-q">${i+1}. ${w.q}</div><div class="wi-y">✗ 你的答案：${w.y}</div><div class="wi-c">✓ 正確答案：${w.a}</div></div>`;});
+        document.getElementById('wr').innerHTML=rh;}
+    show('scr-result');
+}
+function toggleReview(){const el=document.getElementById('wr');el.style.display=el.style.display==='none'?'block':'none';if(el.style.display==='block')el.scrollIntoView({behavior:'smooth'});}
+</script>
+</body>
+</html>
