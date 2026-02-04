@@ -17,6 +17,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .flex-screen{display:none;position:relative;z-index:1;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center}
 .flex-screen.active{display:flex}
 
+.back-link{position:fixed;top:18px;left:20px;z-index:60;display:flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:.82rem;letter-spacing:.05em;padding:7px 14px;border:1px solid rgba(212,175,55,.15);background:rgba(10,10,15,.85);backdrop-filter:blur(8px);transition:.3s}
+.back-link:hover{color:var(--gold-l);border-color:var(--gold);box-shadow:0 3px 15px rgba(212,175,55,.15)}
 .deco{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:25px}
 .deco::before,.deco::after{content:'';width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .deco-d{width:10px;height:10px;background:var(--gold);transform:rotate(45deg);position:relative}
@@ -98,6 +100,7 @@ h1.title{font-family:'Cormorant Garamond','Noto Sans TC',serif;font-size:clamp(2
 </style>
 </head>
 <body>
+<a class="back-link" href="index.html">← 調酒配方</a>
 
 <!-- ═══ START ═══ -->
 <div id="scr-start" class="flex-screen active">
@@ -249,9 +252,7 @@ C.forEach(c=>{
     if(ni)Q.push(q('材料辨識',`以下哪個<em>不是</em>「${c.zh}」的材料？`,ni,pick(c.ing.map(i=>i.zh),3)));
     const cnt=String(c.ing.length);
     Q.push(q('配方結構',`「${c.zh}」共有幾種材料？`,cnt,pick(['2','3','4','5','6','7','8'].filter(x=>x!==cnt),3)));
-    Q.push(q('中英對照',`「${c.zh}」的英文名稱是什麼？`,c.en,pick(allCEn,3,[c.en])));
-    Q.push(q('中英對照',`「${c.en}」的中文名稱是什麼？`,c.zh,pick(allCZh,3,[c.zh])));
-    shuf(c.ing).slice(0,2).forEach(ig=>{
+    shuf(c.ing).slice(0,3).forEach(ig=>{
         const wa=pick(allAmt,3,[ig.a]);
         if(wa.length>=3) Q.push(q('用量記憶',`「${c.zh}」中「${ig.zh}」的用量是多少？`,ig.a,wa));
     });
@@ -295,18 +296,14 @@ Object.entries(ga2c).forEach(([g,cs])=>{
 const allSpZh=SP.map(s=>s.zh),allSpEn=SP.map(s=>s.en),allSpTp=uniq(SP.map(s=>s.tp)),allSpCat=uniq(SP.map(s=>s.cat));
 SP.forEach(s=>{
     Q.push(q('基酒知識',`「${s.zh}」屬於什麼類型？`,s.tp,pick(allSpTp,3,[s.tp])));
-    Q.push(q('基酒知識',`「${s.zh}」的英文名稱是什麼？`,s.en,pick(allSpEn,3,[s.en])));
-    Q.push(q('基酒知識',`「${s.en}」的中文名稱是什麼？`,s.zh,pick(allSpZh,3,[s.zh])));
     Q.push(q('基酒知識',`「${s.zh}」屬於以下哪個大分類？`,s.cat,pick(allSpCat,3,[s.cat])));
     if(s.usg){const us=s.usg.split('、'),cor=pickOne(us),wr=pick(allCZh,3,us);
         if(cor&&wr.length>=3) Q.push(q('基酒知識',`「${s.zh}」常用於以下哪杯調酒？`,cor,wr));}
 });
 
 const ingPairs=[];C.forEach(c=>c.ing.forEach(i=>{if(!ingPairs.find(p=>p.zh===i.zh))ingPairs.push(i);}));
-shuf(ingPairs).slice(0,30).forEach(p=>Q.push(q('材料翻譯',`「${p.en}」的中文名稱是什麼？`,p.zh,pick(ingPairs.map(x=>x.zh),3,[p.zh]))));
-shuf(ingPairs).slice(0,20).forEach(p=>Q.push(q('材料翻譯',`「${p.zh}」的英文名稱是什麼？`,p.en,pick(ingPairs.map(x=>x.en),3,[p.en]))));
 
-for(let i=0;i<10;i++){
+for(let i=0;i<16;i++){
     const s4=shuf(C).slice(0,4);
     const most=s4.reduce((a,b)=>a.ing.length>b.ing.length?a:b);
     Q.push(q('配方結構',`以下哪杯調酒的材料種類最多？`,most.zh,s4.filter(x=>x!==most).map(x=>x.zh)));
@@ -318,6 +315,61 @@ C.forEach(c=>c.ing.forEach(ig=>{
     const wa=pick(allAmt,3,[ig.a]);
     if(wa.length>=3) Q.push(q('用量記憶',`在「${c.zh}」的配方中，「${ig.zh}」需要多少？`,ig.a,wa));
 }));
+
+// ═══ 共用材料題 ═══
+Object.entries(i2c).forEach(([ing,cs])=>{
+    if(cs.length>=2){
+        const no=allCZh.filter(x=>!cs.includes(x));
+        if(no.length>=1){
+            const cor=pickOne(no);
+            Q.push(q('材料辨識',`以下哪杯調酒<em>沒有</em>使用「${ing}」？`,cor,pick(cs,3)));
+        }
+    }
+});
+
+// ═══ 同分類比較題 ═══
+Object.keys(CN).forEach(cat=>{
+    const group=C.filter(c=>c.cat===cat);
+    if(group.length>=4){
+        for(let i=0;i<3;i++){
+            const s4=shuf(group).slice(0,4);
+            const most=s4.reduce((a,b)=>a.ing.length>b.ing.length?a:b);
+            Q.push(q('配方結構',`在「${CN[cat]}」中，以下哪杯調酒的材料最多？`,most.zh,s4.filter(x=>x!==most).map(x=>x.zh)));
+        }
+    }
+});
+
+// ═══ 方法配杯題 ═══
+C.forEach(c=>{
+    Q.push(q('杯具知識',`使用「${MN[c.m]}」調製的「${c.zh}」，應該盛裝在什麼杯子？`,c.gZh,pick(allG,3,[c.gZh])));
+});
+
+// ═══ 第一材料題 ═══
+C.forEach(c=>{
+    if(c.ing.length>=2){
+        const first=c.ing[0].zh;
+        Q.push(q('材料辨識',`「${c.zh}」的第一種（主要）材料是什麼？`,first,pick(allIng,3,[first])));
+    }
+});
+
+// ═══ 裝飾反推分類題 ═══
+Object.entries(ga2c).forEach(([g,cs])=>{
+    if(cs.length>=2){
+        const cor=pickOne(cs);
+        const other=cs.filter(x=>x!==cor);
+        const no=allCZh.filter(x=>!cs.includes(x));
+        if(no.length>=2&&other.length>=1) Q.push(q('裝飾搭配',`以下哪杯調酒的裝飾物<em>不是</em>「${g}」？`,pickOne(no),pick(cs,3)));
+    }
+});
+
+// ═══ 調酒→分類 反向加強 ═══
+C.forEach(c=>{
+    const sameCat=C.filter(x=>x.cat===c.cat&&x.id!==c.id).map(x=>x.zh);
+    const diffCat=C.filter(x=>x.cat!==c.cat).map(x=>x.zh);
+    if(sameCat.length>=1&&diffCat.length>=1){
+        Q.push(q('酒款分類',`以下哪杯調酒和「${c.zh}」屬於同一分類？`,pickOne(sameCat),pick(diffCat,3)));
+    }
+});
 
 const seen=new Set(),unique=[];
 for(const item of shuf(Q)){
