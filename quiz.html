@@ -112,7 +112,13 @@ h1.title{font-family:'Cormorant Garamond','Noto Sans TC',serif;font-size:clamp(2
 .wi-q{font-size:.88rem;color:var(--cream);margin-bottom:5px;line-height:1.5}
 .wi-y{font-size:.8rem;color:var(--rose)}.wi-c{font-size:.8rem;color:var(--mint);margin-top:2px}
 
-@media(max-width:768px){.modes{grid-template-columns:1fr}.q-txt{font-size:1.05rem}.qh{padding:10px 14px;gap:10px}.timer{font-size:1.1rem}}
+.lang-sw{display:flex;align-items:center;gap:6px}
+.lang-btn{background:0;border:none;color:var(--muted);font-family:inherit;font-size:.78rem;letter-spacing:.08em;cursor:pointer;padding:5px 8px;transition:.3s}
+.lang-btn:hover{color:var(--gold-l)}
+.lang-btn.active{color:var(--gold);font-weight:600}
+.lang-div{color:var(--muted);opacity:.5;font-size:.7rem}
+
+@media(max-width:768px){.modes{grid-template-columns:1fr}.q-txt{font-size:1.05rem}.qh{padding:10px 14px;gap:10px}.timer{font-size:1.1rem}.lang-sw{gap:4px}.lang-btn{font-size:.72rem;padding:4px 6px}}
 </style>
 </head>
 <body>
@@ -120,15 +126,20 @@ h1.title{font-family:'Cormorant Garamond','Noto Sans TC',serif;font-size:clamp(2
 
 <!-- ═══ START ═══ -->
 <div id="scr-start" class="flex-screen active">
+<div class="lang-sw" style="position:absolute;top:20px;right:20px">
+    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中文</button>
+    <span class="lang-div">|</span>
+    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+</div>
 <div class="deco"><div class="deco-d"></div></div>
-<h1 class="title">調酒知識測驗</h1>
+<h1 class="title" id="start-title">調酒知識測驗</h1>
 <p class="subtitle">Cocktail Knowledge Quiz &middot; 500 Questions</p>
 <div class="modes" id="modes">
-    <div class="mode" data-mode="50"><div class="mode-ico">🎲</div><div class="mode-t">隨機精選</div><div class="mode-d">從題庫中隨機抽取 50 題快速測驗</div><div class="mode-n">50 題</div></div>
-    <div class="mode" data-mode="100"><div class="mode-ico">🎯</div><div class="mode-t">百題挑戰</div><div class="mode-d">隨機 100 題，兼具深度與效率</div><div class="mode-n">100 題</div></div>
-    <div class="mode" data-mode="500"><div class="mode-ico">📋</div><div class="mode-t">完整測驗</div><div class="mode-d">挑戰全部 500 題，完整測試調酒知識</div><div class="mode-n">500 題</div></div>
+    <div class="mode" data-mode="50"><div class="mode-ico">🎲</div><div class="mode-t" data-zh="隨機精選" data-en="Quick 50">隨機精選</div><div class="mode-d" data-zh="從題庫中隨機抽取 50 題快速測驗" data-en="Random 50 questions for a quick test">從題庫中隨機抽取 50 題快速測驗</div><div class="mode-n" data-zh="50 題" data-en="50 Qs">50 題</div></div>
+    <div class="mode" data-mode="100"><div class="mode-ico">🎯</div><div class="mode-t" data-zh="百題挑戰" data-en="Century Challenge">百題挑戰</div><div class="mode-d" data-zh="隨機 100 題，兼具深度與效率" data-en="Random 100 questions, balanced depth">隨機 100 題，兼具深度與效率</div><div class="mode-n" data-zh="100 題" data-en="100 Qs">100 題</div></div>
+    <div class="mode" data-mode="500"><div class="mode-ico">📋</div><div class="mode-t" data-zh="完整測驗" data-en="Full Test">完整測驗</div><div class="mode-d" data-zh="挑戰全部 500 題，完整測試調酒知識" data-en="Challenge all 500 questions">挑戰全部 500 題，完整測試調酒知識</div><div class="mode-n" data-zh="500 題" data-en="500 Qs">500 題</div></div>
 </div>
-<button class="go" id="go-btn" disabled>選擇模式開始測驗</button>
+<button class="go" id="go-btn" disabled data-zh="選擇模式開始測驗" data-en="Select a mode to start">選擇模式開始測驗</button>
 </div>
 
 <!-- ═══ QUIZ ═══ -->
@@ -136,7 +147,12 @@ h1.title{font-family:'Cormorant Garamond','Noto Sans TC',serif;font-size:clamp(2
 <div class="qh">
     <div class="qh-prog"><div class="qh-top"><span id="p-lbl"></span><span id="p-pct"></span></div><div class="bar"><div class="bar-fill" id="p-bar"></div></div></div>
     <div class="timer" id="timer">00:00</div>
-    <div class="qh-sc"><div class="num" id="sc-live">0</div><div class="lbl">正確</div></div>
+    <div class="lang-sw">
+        <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中文</button>
+        <span class="lang-div">|</span>
+        <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+    </div>
+    <div class="qh-sc"><div class="num" id="sc-live">0</div><div class="lbl" id="sc-lbl">正確</div></div>
     <button class="qh-q" id="quit-btn">結束</button>
 </div>
 <div class="qa" id="qa"></div>
@@ -240,6 +256,41 @@ const SP=[
 {zh:"莫林巧克力糖漿",en:"Monin Chocolate Syrup",tp:"巧克力糖漿",cat:"糖漿",usg:"巧克力女士、甜蜜配方"},
 {zh:"莫林紅石榴糖漿",en:"Monin Grenadine Syrup",tp:"紅石榴糖漿",cat:"糖漿",usg:"龍舌蘭日出、新加坡司令"}
 ];
+
+/* ════════════════ LANGUAGE ════════════════ */
+let lang=localStorage.getItem('cocktail-lang')||'zh';
+function t(zh,en){return lang==='zh'?zh:en;}
+function updateLangUI(){
+    // 更新所有有 data-zh/data-en 的元素
+    document.querySelectorAll('[data-zh][data-en]').forEach(el=>{
+        el.textContent=lang==='zh'?el.dataset.zh:el.dataset.en;
+    });
+    // 更新語言按鈕狀態
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+    // 更新標題
+    const title=document.getElementById('start-title');
+    if(title)title.textContent=t('調酒知識測驗','Cocktail Quiz');
+    // 更新返回連結
+    const backLink=document.querySelector('.back-link');
+    if(backLink)backLink.textContent=t('← 調酒配方','← Recipes');
+    // 更新測驗中的 UI
+    const scLbl=document.getElementById('sc-lbl');
+    if(scLbl)scLbl.textContent=t('正確','Correct');
+    const quitBtn=document.getElementById('quit-btn');
+    if(quitBtn)quitBtn.textContent=t('結束','Quit');
+}
+function switchLang(l){
+    lang=l;
+    localStorage.setItem('cocktail-lang',l);
+    updateLangUI();
+    if(typeof questions!=='undefined'&&questions&&questions.length>0&&!answered){
+        render(); // 重新渲染當前題目
+    }
+}
+// 初始化語言
+document.addEventListener('DOMContentLoaded',()=>{
+    updateLangUI();
+});
 
 /* ════════════════ HELPERS ════════════════ */
 function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
@@ -410,11 +461,14 @@ C.forEach(c=>{
         const shown=shuffledIng.slice(1);
         Q.push({
             cat:'材料默寫',
+            catEn:'Ingredient Recall',
             txt:`請填寫「${c.zh}」缺少的材料：`,
+            txtEn:`Fill in the missing ingredient for "${c.en}":`,
             ans:hidden.zh,
             ansEn:hidden.en,
             type:'fill',
             shownIng:shown.map(i=>i.zh),
+            shownIngEn:shown.map(i=>i.en),
             hint:hidden.zh.length,
             hintEn:hidden.en.length
         });
@@ -442,7 +496,7 @@ document.getElementById('modes').addEventListener('click',e=>{
     document.querySelectorAll('.mode').forEach(m=>m.classList.remove('sel'));
     card.classList.add('sel');mode=+card.dataset.mode;
     const btn=document.getElementById('go-btn');btn.disabled=false;
-    btn.textContent=`開始 ${mode} 題測驗`;
+    btn.textContent=t(`開始 ${mode} 題測驗`,`Start ${mode} Questions`);
 });
 document.getElementById('go-btn').addEventListener('click',startQuiz);
 document.getElementById('quit-btn').addEventListener('click',()=>{if(confirm('確定要結束測驗嗎？'))endQuiz();});
@@ -469,32 +523,42 @@ function render(){
     let contentHtml='';
     if(qn.type==='fill'){
         // 默寫題
+        const ingList=lang==='zh'?qn.shownIng:qn.shownIngEn;
+        const qTxt=lang==='zh'?qn.txt:qn.txtEn;
+        const qCat=lang==='zh'?qn.cat:qn.catEn;
+        const hintTxt=lang==='zh'
+            ?`提示：${qn.hint} 個字（或英文 ${qn.hintEn} chars）`
+            :`Hint: ${qn.hintEn} chars (or 中文 ${qn.hint} 字)`;
+        const placeholder=lang==='zh'?'輸入材料名稱（中/英皆可）...':'Enter ingredient name (Chinese/English)...';
+        const submitTxt=lang==='zh'?'確認':'Submit';
+        const nextTxt=idx<total-1?(lang==='zh'?'下一題 →':'Next →'):(lang==='zh'?'查看結果':'View Results');
         contentHtml=`
-        <div class="q-cat">${qn.cat}</div>
+        <div class="q-cat">${qCat}</div>
         <div class="q-num">Question ${idx+1}</div>
-        <div class="q-txt">${qn.txt}</div>
+        <div class="q-txt">${qTxt}</div>
         <ul class="ing-list">
-            ${qn.shownIng.map(ing=>`<li>• ${ing}</li>`).join('')}
-            <li class="blank">• ？？？</li>
+            ${ingList.map(ing=>`<li>• ${ing}</li>`).join('')}
+            <li class="blank">• ???</li>
         </ul>
         <div class="fill-area">
-            <div class="fill-hint">提示：中文 ${qn.hint} 字 / English ${qn.hintEn} chars</div>
+            <div class="fill-hint">${hintTxt}</div>
             <div class="fill-row">
-                <input type="text" class="fill-input" id="fill-input" placeholder="輸入中文或英文材料名稱..." autocomplete="off">
-                <button class="fill-submit" id="fill-submit">確認</button>
+                <input type="text" class="fill-input" id="fill-input" placeholder="${placeholder}" autocomplete="off">
+                <button class="fill-submit" id="fill-submit">${submitTxt}</button>
             </div>
         </div>
         <div class="fb" id="fb"></div>
-        <button class="nxt" id="nxt">${idx<total-1?'下一題 →':'查看結果'}</button>`;
+        <button class="nxt" id="nxt">${nextTxt}</button>`;
     }else{
         // 選擇題
+        const nextTxt=idx<total-1?(lang==='zh'?'下一題 →':'Next →'):(lang==='zh'?'查看結果':'View Results');
         contentHtml=`
         <div class="q-cat">${qn.cat}</div>
         <div class="q-num">Question ${idx+1}</div>
         <div class="q-txt">${qn.txt}</div>
         <div class="opts" id="opts">${qn.opts.map((o,i)=>`<button class="opt" data-idx="${i}"><span class="opt-l">${labels[i]}</span><span class="opt-t">${o}</span></button>`).join('')}</div>
         <div class="fb" id="fb"></div>
-        <button class="nxt" id="nxt">${idx<total-1?'下一題 →':'查看結果'}</button>`;
+        <button class="nxt" id="nxt">${nextTxt}</button>`;
     }
 
     document.getElementById('qa').innerHTML=contentHtml;
