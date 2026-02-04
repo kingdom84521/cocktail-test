@@ -374,6 +374,8 @@ C.forEach(c=>{
 const seen=new Set(),unique=[];
 for(const item of shuf(Q)){
     if(item.opts.length!==4)continue;
+    const plain=item.txt.replace(/<[^>]+>/g,'');
+    if(plain.includes(item.ans))continue;
     const key=item.txt+item.ans;
     if(!seen.has(key)){seen.add(key);unique.push(item);}
     if(unique.length>=500)break;

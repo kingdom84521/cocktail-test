@@ -551,7 +551,7 @@ const spiritFilters = [
 ];
 
 // ============ STATE ============
-let lang = 'zh';
+let lang = localStorage.getItem('cocktail-lang') || 'zh';
 
 // ============ RENDER FUNCTIONS ============
 function t(zh, en) { return lang === 'zh' ? zh : en; }
@@ -652,7 +652,7 @@ function filterMethods(filter, btn) {
 function renderSpiritFilters() {
     const nav = document.getElementById('spirit-filters');
     nav.innerHTML = spiritFilters.map((f,i) =>
-        `<button class="spirit-filter${i===0?' active':''}" data-filter="${f.value}" onclick="filterSpirits('${f.value}',this)">${t(f.zh,f.en)}</button>`
+        `<button class="filter-btn${i===0?' active':''}" data-filter="${f.value}" onclick="filterSpirits('${f.value}',this)">${t(f.zh,f.en)}</button>`
     ).join('');
 }
 
@@ -700,7 +700,7 @@ function filterCocktails(filter, btn) {
 }
 
 function filterSpirits(filter, btn) {
-    document.querySelectorAll('.spirit-filter').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#spirit-filters .filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.spirit-card').forEach(card => {
         card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
@@ -737,11 +737,13 @@ function updateLangTexts() {
 
 function switchLang(l) {
     lang = l;
+    localStorage.setItem('cocktail-lang', l);
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
     renderAll();
 }
 
 // ============ INIT ============
+document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
 renderAll();
 </script>
 </body>
