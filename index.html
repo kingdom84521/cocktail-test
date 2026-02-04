@@ -46,7 +46,11 @@ header { position:relative; text-align:center; padding:80px 20px 50px; backgroun
 h1 { font-family:'Cormorant Garamond','Noto Sans TC',serif; font-size:3.5rem; font-weight:700; color:var(--gold-light); text-shadow:0 0 40px rgba(212,175,55,0.3); letter-spacing:0.1em; margin-bottom:10px; }
 .subtitle { font-size:1rem; color:var(--cream-muted); letter-spacing:0.3em; text-transform:uppercase; }
 /* Language Switcher */
-.lang-switcher { position:absolute; top:20px; right:30px; display:flex; align-items:center; gap:8px; z-index:100; }
+.header-actions { position:absolute; top:20px; right:30px; display:flex; align-items:center; gap:16px; z-index:100; }
+.quiz-link { display:flex; align-items:center; gap:6px; background:linear-gradient(135deg,var(--gold-dark),var(--gold-primary)); color:var(--bg-dark); text-decoration:none; font-family:'Josefin Sans','Noto Sans TC',sans-serif; font-size:0.8rem; font-weight:600; letter-spacing:0.08em; padding:6px 14px; transition:all 0.3s; }
+.quiz-link:hover { box-shadow:0 3px 15px rgba(212,175,55,0.4); transform:translateY(-1px); }
+.quiz-link svg { width:14px; height:14px; }
+.lang-switcher { display:flex; align-items:center; gap:8px; }
 .lang-btn { background:transparent; border:none; color:var(--cream-muted); font-family:'Josefin Sans',sans-serif; font-size:0.85rem; letter-spacing:0.1em; cursor:pointer; transition:all 0.3s; padding:5px 10px; }
 .lang-btn:hover { color:var(--gold-light); }
 .lang-btn.active { color:var(--gold-primary); font-weight:500; }
@@ -172,7 +176,8 @@ footer { text-align:center; padding:40px 20px; border-top:1px solid rgba(212,175
     .cocktail-grid { grid-template-columns:1fr; }
     .method-grid { grid-template-columns:1fr; }
     .spirits-grid { grid-template-columns:1fr; }
-    .lang-switcher { top:15px; right:15px; }
+    .header-actions { top:15px; right:15px; gap:10px; }
+    .quiz-link { font-size:0.72rem; padding:5px 10px; }
 }
 /* ============ PRINT STYLES ============ */
 @media print {
@@ -180,7 +185,7 @@ footer { text-align:center; padding:40px 20px; border-top:1px solid rgba(212,175
     * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
     body { background:white !important; color:#1a1a1a !important; font-size:10pt !important; line-height:1.4 !important; }
     body::before { display:none !important; }
-    .lang-switcher,.tab-nav,.sub-tab-nav,.filter-nav,.spirit-filter-nav,.print-btn { display:none !important; }
+    .header-actions,.lang-switcher,.tab-nav,.sub-tab-nav,.filter-nav,.spirit-filter-nav,.print-btn { display:none !important; }
     .tab-content,.tab-content:not(.active),
     .sub-content,.sub-content:not(.active),
     #cocktails-tab,#methods-sub,#recipes-sub,#spirits-tab { display:block !important; visibility:visible !important; opacity:1 !important; }
@@ -248,10 +253,13 @@ footer { text-align:center; padding:40px 20px; border-top:1px solid rgba(212,175
 </head>
 <body>
 <header>
-    <div class="lang-switcher">
-        <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中文</button>
-        <span class="lang-divider">|</span>
-        <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+    <div class="header-actions">
+        <a class="quiz-link" href="quiz.html" data-zh="📝 測驗" data-en="📝 Quiz">📝 測驗</a>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中文</button>
+            <span class="lang-divider">|</span>
+            <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+        </div>
     </div>
     <div class="art-deco-line"><div class="art-deco-diamond"></div></div>
     <h1 data-zh="調酒配方" data-en="Cocktail Recipes">調酒配方</h1>
