@@ -412,9 +412,11 @@ C.forEach(c=>{
             cat:'材料默寫',
             txt:`請填寫「${c.zh}」缺少的材料：`,
             ans:hidden.zh,
+            ansEn:hidden.en,
             type:'fill',
             shownIng:shown.map(i=>i.zh),
-            hint:hidden.zh.length
+            hint:hidden.zh.length,
+            hintEn:hidden.en.length
         });
     }
 });
@@ -476,9 +478,9 @@ function render(){
             <li class="blank">• ？？？</li>
         </ul>
         <div class="fill-area">
-            <div class="fill-hint">提示：答案共 ${qn.hint} 個字</div>
+            <div class="fill-hint">提示：中文 ${qn.hint} 字 / English ${qn.hintEn} chars</div>
             <div class="fill-row">
-                <input type="text" class="fill-input" id="fill-input" placeholder="輸入缺少的材料..." autocomplete="off">
+                <input type="text" class="fill-input" id="fill-input" placeholder="輸入中文或英文材料名稱..." autocomplete="off">
                 <button class="fill-submit" id="fill-submit">確認</button>
             </div>
         </div>
@@ -526,8 +528,10 @@ function submitFill(){
     const selected=input.value.trim();
     if(!selected)return; // 空白不處理
     answered=true;
-    const correct=qn.ans;
-    const isOk=selected===correct;
+    const correctZh=qn.ans;
+    const correctEn=qn.ansEn;
+    // 接受中文或英文答案（英文不區分大小寫）
+    const isOk=selected===correctZh || selected.toLowerCase()===correctEn.toLowerCase();
     if(!catSt[qn.cat])catSt[qn.cat]={t:0,c:0};
     catSt[qn.cat].t++;
     input.disabled=true;
@@ -541,8 +545,8 @@ function submitFill(){
     }else{
         input.classList.add('no');
         fb.className='fb fb-no show';
-        fb.innerHTML=`✗ 正確答案：<b>${correct}</b>`;
-        wrongs.push({q:qn.txt+' (已知：'+qn.shownIng.join('、')+')',y:selected||'(未作答)',a:correct});
+        fb.innerHTML=`✗ 正確答案：<b>${correctZh}</b> / <b>${correctEn}</b>`;
+        wrongs.push({q:qn.txt+' (已知：'+qn.shownIng.join('、')+')',y:selected||'(未作答)',a:correctZh+' / '+correctEn});
     }
     document.getElementById('sc-live').textContent=score;
     document.getElementById('nxt').classList.add('show');
