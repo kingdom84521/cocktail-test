@@ -73,6 +73,22 @@ h1.title{font-family:'Cormorant Garamond','Noto Sans TC',serif;font-size:clamp(2
 .nxt{margin-top:22px;background:linear-gradient(135deg,var(--gold-d),var(--gold));border:none;color:var(--bg);font-family:inherit;font-size:.95rem;font-weight:600;letter-spacing:.1em;padding:13px 36px;cursor:pointer;opacity:0;transform:translateY(8px);transition:.4s}
 .nxt.show{opacity:1;transform:translateY(0)}.nxt:hover{box-shadow:0 5px 20px rgba(212,175,55,.3)}
 
+.fill-area{margin-top:10px}
+.fill-hint{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.fill-row{display:flex;gap:10px;align-items:center}
+.fill-input{flex:1;background:var(--bg2);border:1px solid rgba(212,175,55,.2);padding:14px 18px;font-family:inherit;font-size:1rem;color:var(--cream);outline:none;transition:.3s}
+.fill-input:focus{border-color:var(--gold);box-shadow:0 0 15px rgba(212,175,55,.15)}
+.fill-input:disabled{opacity:.6;cursor:not-allowed}
+.fill-input.ok{border-color:var(--ok);background:var(--ok-bg)}
+.fill-input.no{border-color:var(--no);background:var(--no-bg)}
+.fill-submit{background:linear-gradient(135deg,var(--gold-d),var(--gold));border:none;color:var(--bg);font-family:inherit;font-size:.9rem;font-weight:600;padding:14px 24px;cursor:pointer;transition:.3s}
+.fill-submit:hover{box-shadow:0 3px 15px rgba(212,175,55,.3)}
+.fill-submit:disabled{opacity:.4;cursor:not-allowed}
+.ing-list{list-style:none;margin:15px 0;padding:0}
+.ing-list li{padding:8px 0;border-bottom:1px solid rgba(212,175,55,.08);color:var(--cream);font-size:.95rem}
+.ing-list li:last-child{border-bottom:none}
+.ing-list .blank{color:var(--gold);font-style:italic}
+
 .timer{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold-l);min-width:70px;text-align:center}
 
 .r-score{margin:25px 0}
@@ -305,10 +321,19 @@ const ingPairs=[];C.forEach(c=>c.ing.forEach(i=>{if(!ingPairs.find(p=>p.zh===i.z
 
 for(let i=0;i<16;i++){
     const s4=shuf(C).slice(0,4);
-    const most=s4.reduce((a,b)=>a.ing.length>b.ing.length?a:b);
-    Q.push(q('配方結構',`以下哪杯調酒的材料種類最多？`,most.zh,s4.filter(x=>x!==most).map(x=>x.zh)));
-    const least=s4.reduce((a,b)=>a.ing.length<b.ing.length?a:b);
-    Q.push(q('配方結構',`以下哪杯調酒的材料種類最少？`,least.zh,s4.filter(x=>x!==least).map(x=>x.zh)));
+    const maxLen=Math.max(...s4.map(x=>x.ing.length));
+    const minLen=Math.min(...s4.map(x=>x.ing.length));
+    const mostList=s4.filter(x=>x.ing.length===maxLen);
+    const leastList=s4.filter(x=>x.ing.length===minLen);
+    // 只有唯一最多/最少時才出題，避免多個正確答案
+    if(mostList.length===1){
+        const most=mostList[0];
+        Q.push(q('配方結構',`以下哪杯調酒的材料種類最多？`,most.zh,s4.filter(x=>x!==most).map(x=>x.zh)));
+    }
+    if(leastList.length===1){
+        const least=leastList[0];
+        Q.push(q('配方結構',`以下哪杯調酒的材料種類最少？`,least.zh,s4.filter(x=>x!==least).map(x=>x.zh)));
+    }
 }
 
 C.forEach(c=>c.ing.forEach(ig=>{
@@ -333,8 +358,13 @@ Object.keys(CN).forEach(cat=>{
     if(group.length>=4){
         for(let i=0;i<3;i++){
             const s4=shuf(group).slice(0,4);
-            const most=s4.reduce((a,b)=>a.ing.length>b.ing.length?a:b);
-            Q.push(q('配方結構',`在「${CN[cat]}」中，以下哪杯調酒的材料最多？`,most.zh,s4.filter(x=>x!==most).map(x=>x.zh)));
+            const maxLen=Math.max(...s4.map(x=>x.ing.length));
+            const mostList=s4.filter(x=>x.ing.length===maxLen);
+            // 只有唯一最多時才出題
+            if(mostList.length===1){
+                const most=mostList[0];
+                Q.push(q('配方結構',`在「${CN[cat]}」中，以下哪杯調酒的材料最多？`,most.zh,s4.filter(x=>x!==most).map(x=>x.zh)));
+            }
         }
     }
 });
@@ -371,9 +401,28 @@ C.forEach(c=>{
     }
 });
 
+// ═══ 默寫題（填空）═══
+C.forEach(c=>{
+    if(c.ing.length>=3){
+        // 隨機選一個材料作為答案，其餘顯示
+        const shuffledIng=shuf(c.ing);
+        const hidden=shuffledIng[0];
+        const shown=shuffledIng.slice(1);
+        Q.push({
+            cat:'材料默寫',
+            txt:`請填寫「${c.zh}」缺少的材料：`,
+            ans:hidden.zh,
+            type:'fill',
+            shownIng:shown.map(i=>i.zh),
+            hint:hidden.zh.length
+        });
+    }
+});
+
 const seen=new Set(),unique=[];
 for(const item of shuf(Q)){
-    if(item.opts.length!==4)continue;
+    // 默寫題沒有 opts，選擇題需要 4 個選項
+    if(item.type!=='fill' && (!item.opts || item.opts.length!==4))continue;
     const plain=item.txt.replace(/<[^>]+>/g,'');
     if(plain.includes(item.ans))continue;
     const key=item.txt+item.ans;
@@ -414,15 +463,50 @@ function render(){
     document.getElementById('p-bar').style.width=pct+'%';
     document.getElementById('sc-live').textContent=score;
     const labels=['A','B','C','D'];
-    document.getElementById('qa').innerHTML=`
+
+    let contentHtml='';
+    if(qn.type==='fill'){
+        // 默寫題
+        contentHtml=`
+        <div class="q-cat">${qn.cat}</div>
+        <div class="q-num">Question ${idx+1}</div>
+        <div class="q-txt">${qn.txt}</div>
+        <ul class="ing-list">
+            ${qn.shownIng.map(ing=>`<li>• ${ing}</li>`).join('')}
+            <li class="blank">• ？？？</li>
+        </ul>
+        <div class="fill-area">
+            <div class="fill-hint">提示：答案共 ${qn.hint} 個字</div>
+            <div class="fill-row">
+                <input type="text" class="fill-input" id="fill-input" placeholder="輸入缺少的材料..." autocomplete="off">
+                <button class="fill-submit" id="fill-submit">確認</button>
+            </div>
+        </div>
+        <div class="fb" id="fb"></div>
+        <button class="nxt" id="nxt">${idx<total-1?'下一題 →':'查看結果'}</button>`;
+    }else{
+        // 選擇題
+        contentHtml=`
         <div class="q-cat">${qn.cat}</div>
         <div class="q-num">Question ${idx+1}</div>
         <div class="q-txt">${qn.txt}</div>
         <div class="opts" id="opts">${qn.opts.map((o,i)=>`<button class="opt" data-idx="${i}"><span class="opt-l">${labels[i]}</span><span class="opt-t">${o}</span></button>`).join('')}</div>
         <div class="fb" id="fb"></div>
         <button class="nxt" id="nxt">${idx<total-1?'下一題 →':'查看結果'}</button>`;
+    }
+
+    document.getElementById('qa').innerHTML=contentHtml;
     answered=false;
-    document.getElementById('opts').addEventListener('click',e=>{const btn=e.target.closest('.opt');if(!btn||answered)return;choose(btn);});
+
+    if(qn.type==='fill'){
+        const input=document.getElementById('fill-input');
+        const submitBtn=document.getElementById('fill-submit');
+        submitBtn.addEventListener('click',()=>{if(!answered)submitFill();});
+        input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!answered)submitFill();});
+        input.focus();
+    }else{
+        document.getElementById('opts').addEventListener('click',e=>{const btn=e.target.closest('.opt');if(!btn||answered)return;choose(btn);});
+    }
     document.getElementById('nxt').addEventListener('click',next);
 }
 
@@ -434,6 +518,34 @@ function choose(btn){
     if(isOk){score++;catSt[qn.cat].c++;fb.className='fb fb-ok show';fb.innerHTML='✓ 正確！';}
     else{fb.className='fb fb-no show';fb.innerHTML=`✗ 正確答案：<b>${correct}</b>`;wrongs.push({q:qn.txt,y:selected,a:correct});}
     document.getElementById('sc-live').textContent=score;document.getElementById('nxt').classList.add('show');
+}
+
+function submitFill(){
+    const qn=questions[idx];
+    const input=document.getElementById('fill-input');
+    const selected=input.value.trim();
+    if(!selected)return; // 空白不處理
+    answered=true;
+    const correct=qn.ans;
+    const isOk=selected===correct;
+    if(!catSt[qn.cat])catSt[qn.cat]={t:0,c:0};
+    catSt[qn.cat].t++;
+    input.disabled=true;
+    document.getElementById('fill-submit').disabled=true;
+    const fb=document.getElementById('fb');
+    if(isOk){
+        score++;catSt[qn.cat].c++;
+        input.classList.add('ok');
+        fb.className='fb fb-ok show';
+        fb.innerHTML='✓ 正確！';
+    }else{
+        input.classList.add('no');
+        fb.className='fb fb-no show';
+        fb.innerHTML=`✗ 正確答案：<b>${correct}</b>`;
+        wrongs.push({q:qn.txt+' (已知：'+qn.shownIng.join('、')+')',y:selected||'(未作答)',a:correct});
+    }
+    document.getElementById('sc-live').textContent=score;
+    document.getElementById('nxt').classList.add('show');
 }
 
 function next(){idx++;if(idx>=questions.length)endQuiz();else{render();window.scrollTo({top:0,behavior:'smooth'});}}
