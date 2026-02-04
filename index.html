@@ -103,6 +103,9 @@ main { max-width:1400px; margin:0 auto; padding:0 20px; position:relative; z-ind
 .method-text { font-size:0.85rem; color:var(--cream-muted); line-height:1.6; padding-left:12px; border-left:2px solid var(--accent-mint); margin-bottom:15px; }
 .garnish-box { display:flex; align-items:center; gap:8px; padding:8px 12px; background:rgba(199,125,142,0.08); border:1px solid rgba(199,125,142,0.15); font-size:0.85rem; color:var(--accent-rose); }
 .garnish-icon { font-size:1.1rem; }
+.memo-box { display:flex; align-items:flex-start; gap:8px; padding:9px 12px; margin-top:12px; background:rgba(212,175,55,0.06); border:1px solid rgba(212,175,55,0.12); border-left:3px solid var(--gold-primary); font-size:0.8rem; color:var(--cream-muted); line-height:1.6; }
+.memo-box .memo-icon { flex-shrink:0; font-size:0.85rem; margin-top:1px; }
+.memo-box .memo-text { flex:1; }
 /* ============ METHODS PAGE ============ */
 .methods-intro { text-align:center; padding:40px 20px 10px; max-width:800px; margin:0 auto; }
 .methods-intro p { color:var(--cream-muted); font-size:1rem; line-height:1.8; }
@@ -216,6 +219,8 @@ footer { text-align:center; padding:40px 20px; border-top:1px solid rgba(212,175
     .ingredient-amount { color:#1a1a1a !important; font-weight:600 !important; }
     .method-text { font-size:8pt !important; color:#333 !important; border-left:2px solid #81c784 !important; background:#f9fbe7 !important; padding:2mm 3mm !important; }
     .garnish-box { background:#fce4ec !important; border:1px solid #f48fb1 !important; padding:2mm !important; font-size:8pt !important; color:#c2185b !important; }
+    .memo-box { background:#fff8e1 !important; border:1px solid #ffd54f !important; border-left:3px solid #f9a825 !important; padding:2mm !important; margin-top:2mm !important; font-size:7.5pt !important; color:#5d4037 !important; }
+    .memo-icon { font-size:8pt !important; }
     /* Methods print */
     .method-card { background:white !important; border:1px solid #ccc !important; }
     .method-card-header { background:#f8f6f2 !important; border-bottom:1px solid #ddd !important; padding:3mm !important; }
@@ -410,6 +415,33 @@ const cocktails = [
  garnishZh:"柳橙片",garnishEn:"Orange Slice",garnishIcon:"🍊"}
 ];
 
+const memos = {
+1:{zh:"想像哈瓦那的陽光（蘭姆酒）映照在雙重橙光上（干邑橙皮甜酒 + 柑曼怡）。",en:'Think of Havana sunshine (Rum) reflecting off double orange lights (Dry Orange + Grand Marnier).'},
+2:{zh:"「老紳士的四件套」：威士忌、苦精、方糖、蘇打水。",en:'The "Old Man\'s Four-Piece Suit": Whisky, bitters, sugar, and bubbles.'},
+3:{zh:"經典的海盜「酸酒」公式：蘭姆酒 + 萊姆 + 糖。",en:'The classic pirate\'s "Sour": Rum + Lime + Sugar.'},
+4:{zh:"義大利三位一體 — 琴酒、金巴利、甜香艾酒完美的 1:1:1 黃金比例。",en:"The Italian Trinity — a perfect 1:1:1 golden ratio of Gin, Campari, and Sweet Vermouth."},
+5:{zh:"簡單的皇室品味 — 女王最愛的兩款酒混合在一起。",en:"Simple royalty — the Queen's favorites mixed together."},
+6:{zh:"酒名即配方：Whiskey + Lemon（Sour）+ Sugar。",en:'The name is the recipe: Whiskey + Lemon (Sour) + Sugar.'},
+7:{zh:"酒名即配方：Gin + Tonic Water。",en:"The name is the recipe."},
+8:{zh:"白蘭姆酒與搗碎薄荷是關鍵，再補滿蘇打水。",en:"White Rum and crushed mint are the keys, topped with soda."},
+9:{zh:"最複雜的調酒（8 種材料）。記住「四大酒」：琴酒、櫻桃甜酒、君度、本篤甜酒，再加鳳梨汁。",en:'The most complex (8 ingredients). Remember the "Big Four" spirits (Gin, Cherry, Cointreau, DOM) plus Pineapple juice.'},
+10:{zh:"想像日出畫面：黃色果汁（柳橙）搭配紅色糖漿（紅石榴）緩緩沉入杯底。",en:"Visualizing a sunrise: yellow juice (Orange) with red syrup (Grenadine) sinking to the bottom."},
+11:{zh:"伏特加帶著蜜桃去海灘喝柳橙汁和蔓越莓汁。",en:"Vodka takes a Peach to drink Orange and Cranberry juice at the beach."},
+12:{zh:"「五大白色烈酒」大集合（共 8 種材料），最後用可樂上色。",en:'The "Five White Spirits" assembly (8 ingredients total) colored with Cola.'},
+13:{zh:"遵循「ABC」法則：Alexander 用 Brandy + Cacao + Cream。",en:'Follows the "ABC" rule: Brandy + Cacao + Cream.'},
+14:{zh:"只有兩種材料 — 白色鮮奶油漂浮在深色可可酒上。",en:"Only two ingredients — white cream floating on dark Cacao."},
+15:{zh:"「KBG」特務三人組：Kahlúa、Bailey's、Grand Marnier。注意：沒有鮮奶油！",en:'The "KBG" Special Agents: Kahlúa, Bailey\'s, and Grand Marnier. (Note: No fresh cream!)'},
+16:{zh:"一隻綠色薄荷蚱蜢跳進白色可可鮮奶油浴池。",en:"A green-mint grasshopper jumping into a white cacao cream bath."},
+17:{zh:"一位強悍的女士（威士忌）熱愛「雙倍巧克力」（可可酒 + 巧克力醬）與鮮奶油。",en:'A strong lady (Whisky) who loves "Double Chocolate" (Cacao + Syrup) and cream.'},
+18:{zh:"最像甜點的調酒，記住兩種果泥：南瓜和水蜜桃。",en:"The most dessert-like cocktail; remember the two fruit purées (Pumpkin and Peach)."},
+19:{zh:"如冷風般銳利清冽：伏特加 + 橙皮甜酒 + 萊姆。",en:"Sharp and clear like a cold wind: Vodka + Orange Liqueur + Lime."},
+20:{zh:"一台經典邊車（白蘭地）載著橙皮甜酒和檸檬。",en:"A classic vehicle (Brandy) carrying Orange Liqueur and Lemon."},
+21:{zh:"墨西哥經典：龍舌蘭 + 君度橙酒（頂級橙皮甜酒）+ 萊姆。",en:"The Mexican classic: Tequila + Cointreau (premium orange liqueur) + Lime."},
+22:{zh:"著名的粉紅調酒，特別需要檸檬伏特加（Citron）和蔓越莓汁。",en:"The famous pink drink; specifically requires Citron (Lemon) Vodka and Cranberry."},
+23:{zh:"簡單而深沉：伏特加 + 咖啡甜酒。",en:"Simple and dark: Vodka + Coffee."},
+24:{zh:"只有兩種材料：伏特加和柳橙汁。",en:"Just two ingredients: Vodka and Orange Juice."}
+};
+
 const categoryFilters = [
 {value:"all",zh:"全部",en:"All"},
 {value:"before-dinner",zh:"餐前酒",en:"Before Dinner"},
@@ -555,6 +587,7 @@ function renderCocktailGrid() {
                     <span class="garnish-icon">${c.garnishIcon}</span>
                     <span>${t(c.garnishZh,c.garnishEn)}</span>
                 </div>
+                ${memos[c.id] ? `<div class="memo-box"><span class="memo-icon">💡</span><span class="memo-text">${t(memos[c.id].zh,memos[c.id].en)}</span></div>` : ''}
             </div>
         </article>
     `).join('');
